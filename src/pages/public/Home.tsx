@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowDown, Phone, Mail, Menu, X } from "lucide-react";
 import { usePersona } from "@/contexts/PersonaContext";
 import AccessibilityAssessment from "@/components/AccessibilityAssessment";
+import TestAssessmentButton from "@/components/TestAssessmentButton";
 import heroImage from "@/assets/harderkulm-hero.jpg";
 
 const HomePage = () => {
@@ -240,6 +241,9 @@ const HomePage = () => {
             </div>
           </div>
         </footer>
+        
+        {/* Test Button for Development */}
+        <TestAssessmentButton />
       </div>
     </>
   );

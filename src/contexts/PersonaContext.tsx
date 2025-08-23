@@ -13,14 +13,20 @@ const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
 
 export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [disabilityType, setDisabilityTypeState] = useState<DisabilityType>(null);
-  const [showAssessment, setShowAssessment] = useState(true);
+  const [showAssessment, setShowAssessment] = useState(false);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount and show assessment if no preference saved
   useEffect(() => {
     const saved = localStorage.getItem('claire-george-disability');
+    const hasVisited = localStorage.getItem('claire-george-visited');
+    
     if (saved && saved !== 'null') {
       setDisabilityTypeState(saved as DisabilityType);
       setShowAssessment(false);
+    } else if (!hasVisited) {
+      // First time visitor - show assessment
+      setShowAssessment(true);
+      localStorage.setItem('claire-george-visited', 'true');
     }
   }, []);
 
@@ -34,6 +40,7 @@ export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setDisabilityTypeState(null);
     setShowAssessment(true);
     localStorage.removeItem('claire-george-disability');
+    // Don't remove visited flag - only remove disability preference
   };
 
   return (
