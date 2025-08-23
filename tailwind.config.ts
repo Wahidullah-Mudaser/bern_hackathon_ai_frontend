@@ -68,6 +68,16 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			backgroundImage: {
+				'gradient-alpine': 'var(--gradient-alpine)',
+				'gradient-mountain': 'var(--gradient-mountain)',
+				'gradient-magenta': 'var(--gradient-magenta)',
+			},
+			boxShadow: {
+				'alpine': 'var(--shadow-alpine)',
+				'magenta': 'var(--shadow-magenta)',
+				'glow': 'var(--shadow-glow)',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
