@@ -16,8 +16,47 @@ import {
   Calendar,
   Users,
   Heart,
-  Accessibility
+  Accessibility,
+  AlertTriangle
 } from 'lucide-react';
+
+const disabilityTypes = [
+  { 
+    id: 'wheelchair_user', 
+    name: 'Wheelchair User', 
+    icon: '♿', 
+    color: 'text-blue-600',
+    issues: ['Ramps & elevators info', 'Door width details', 'Bathroom accessibility', 'Accessible images']
+  },
+  { 
+    id: 'dyslexia', 
+    name: 'Dyslexia', 
+    icon: '📖', 
+    color: 'text-green-600',
+    issues: ['Long dense text', 'Complex words', 'Overwhelming paragraphs', 'Needs visual support']
+  },
+  { 
+    id: 'cognitive_impairment', 
+    name: 'Cognitive', 
+    icon: '🧠', 
+    color: 'text-purple-600',
+    issues: ['Complex instructions', 'Information overload', 'Unclear ordering', 'Needs simplification']
+  },
+  { 
+    id: 'anxiety_travel_fear', 
+    name: 'Anxiety', 
+    icon: '😰', 
+    color: 'text-orange-600',
+    issues: ['Safety info hidden', 'Formal tone', 'Information overload', 'Cancellation unclear']
+  },
+  { 
+    id: 'low_vision', 
+    name: 'Low Vision', 
+    icon: '👓', 
+    color: 'text-red-600',
+    issues: ['Small text', 'Low contrast', 'Missing alt text', 'Cluttered navigation']
+  },
+];
 
 interface ContentItem {
   id: number;
@@ -37,7 +76,7 @@ const ContentPreview = () => {
   const [selectedDisabilityType, setSelectedDisabilityType] = useState<string>(disabilityType || '');
   const [content, setContent] = useState<ContentItem | null>(null);
   const [availableContent, setAvailableContent] = useState<ContentItem[]>([]);
-  const [disabilityTypes, setDisabilityTypes] = useState<{ [key: string]: string }>({});
+  const [apiDisabilityTypes, setApiDisabilityTypes] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
 
@@ -47,7 +86,7 @@ const ContentPreview = () => {
       try {
         const response = await cmsApi.getDisabilityTypes();
         if (response.success) {
-          setDisabilityTypes(response.descriptions);
+          setApiDisabilityTypes(response.descriptions);
         }
       } catch (error) {
         console.error('Failed to load disability types:', error);
@@ -342,6 +381,44 @@ const ContentPreview = () => {
 
   return (
     <div className="space-y-6">
+      {/* Accessibility Issues Overview */}
+      <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-orange-800">
+            <AlertTriangle className="h-5 w-5" />
+            Accessibility Pain Points Addressed
+          </CardTitle>
+          <CardDescription className="text-orange-700">
+            Our AI adapts content to solve these specific accessibility challenges:
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {disabilityTypes.map((type) => (
+              <div key={type.id} className="p-3 bg-white/70 rounded-lg border border-orange-100">
+                <div className="flex items-start space-x-3">
+                  <span className="text-xl">{type.icon}</span>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-sm">{type.name}</h3>
+                    <div className="mt-1">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">Issues Solved:</p>
+                      <ul className="text-xs text-muted-foreground space-y-0.5">
+                        {type.issues.map((issue, index) => (
+                          <li key={index} className="flex items-center">
+                            <span className="w-1 h-1 bg-current rounded-full mr-2 flex-shrink-0"></span>
+                            {issue}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Controls */}
       <Card>
         <CardHeader>
@@ -393,9 +470,9 @@ const ContentPreview = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">Original Content</SelectItem>
-                  {Object.entries(disabilityTypes).map(([type, description]) => (
+                  {Object.entries(apiDisabilityTypes).map(([type, description]) => (
                     <SelectItem key={type} value={type}>
-                      {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
