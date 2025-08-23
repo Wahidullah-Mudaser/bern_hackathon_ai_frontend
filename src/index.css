@@ -107,6 +107,7 @@ All colors MUST be HSL.
   }
 }
 
+/* Persona-based styling for maximum efficiency */
 @layer base {
   * {
     @apply border-border;
@@ -114,5 +115,60 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Default persona styles */
+  .persona-default {
+    /* Standard Claire & George styling */
+  }
+
+  /* Wheelchair user optimizations */
+  .persona-wheelchair {
+    --primary: 220 75% 45%; /* Blue focus */
+  }
+
+  /* Low vision optimizations */
+  .persona-low-vision {
+    --background: 0 0% 5%; /* Dark background */
+    --foreground: 0 0% 95%; /* Light text */
+    --primary: 50 100% 60%; /* High contrast yellow */
+    font-size: 1.25rem; /* Larger base text */
+  }
+  .persona-low-vision * {
+    font-weight: 600 !important; /* Bolder text */
+  }
+
+  /* Cognitive support optimizations */
+  .persona-cognitive {
+    --primary: 150 75% 45%; /* Calming green */
+    font-size: 1.125rem;
+  }
+  .persona-cognitive .complex-layout {
+    display: none; /* Hide complex elements */
+  }
+
+  /* Anxiety support optimizations */
+  .persona-anxiety {
+    --primary: 200 75% 45%; /* Calming blue */
+    --background: 200 20% 98%; /* Soft background */
+  }
+  .persona-anxiety .stress-element {
+    display: none; /* Hide potentially stressful elements */
+  }
+
+  /* Dyslexia support optimizations */
+  .persona-dyslexia {
+    --primary: 30 75% 45%; /* Warm orange */
+    font-family: 'OpenDyslexic', sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  /* Hearing impairment optimizations */
+  .persona-hearing {
+    --primary: 250 75% 45%; /* Purple focus */
+  }
+  .persona-hearing .audio-only {
+    display: none; /* Hide audio-only content */
   }
 }
