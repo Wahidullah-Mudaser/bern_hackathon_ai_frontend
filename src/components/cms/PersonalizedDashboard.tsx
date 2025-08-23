@@ -11,6 +11,8 @@ import CMSHeader from "@/components/cms/CMSHeader";
 import ContentManager from "@/components/cms/ContentManager";
 import MediaLibrary from "@/components/cms/MediaLibrary";
 import SettingsPanel from "@/components/cms/SettingsPanel";
+import HotelForm from "@/components/cms/HotelForm";
+import ContentPreview from "@/components/cms/ContentPreview";
 
 const PersonalizedDashboard = () => {
   const { disabilityType } = usePersona();
@@ -137,10 +139,18 @@ const PersonalizedDashboard = () => {
 
         {/* Main CMS Interface */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-fit">
+          <TabsList className="grid w-full grid-cols-6 lg:w-fit">
             <TabsTrigger value="content" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               Content
+            </TabsTrigger>
+            <TabsTrigger value="create-hotel" className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add Hotel
+            </TabsTrigger>
+            <TabsTrigger value="preview" className="flex items-center gap-2">
+              <Eye className="h-4 w-4" />
+              Preview
             </TabsTrigger>
             <TabsTrigger value="media" className="flex items-center gap-2">
               <Image className="h-4 w-4" />
@@ -158,6 +168,14 @@ const PersonalizedDashboard = () => {
 
           <TabsContent value="content" className="space-y-6">
             <ContentManager />
+          </TabsContent>
+
+          <TabsContent value="create-hotel" className="space-y-6">
+            <HotelForm />
+          </TabsContent>
+
+          <TabsContent value="preview" className="space-y-6">
+            <ContentPreview />
           </TabsContent>
 
           <TabsContent value="media" className="space-y-6">
