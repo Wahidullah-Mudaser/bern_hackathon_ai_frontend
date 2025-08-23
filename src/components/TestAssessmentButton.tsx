@@ -18,7 +18,7 @@ const TestAssessmentButton = () => {
       variant="outline"
       className="fixed bottom-4 right-4 z-50 bg-yellow-100 border-yellow-400 text-yellow-800 hover:bg-yellow-200"
     >
-      🧪 Test Accessibility Assessment
+      🧪 How may I help you, in terms of disability?
     </Button>
   );
 };

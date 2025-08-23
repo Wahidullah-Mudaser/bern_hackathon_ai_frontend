@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type DisabilityType = 'wheelchair' | 'low-vision' | 'cognitive' | 'anxiety' | 'dyslexia' | 'hearing' | null;
+export type DisabilityType = 'wheelchair' | 'low-vision' | 'cognitive' | 'anxiety' | 'dyslexia' | 'hearing' | string | null;
 
 interface PersonaContextType {
   disabilityType: DisabilityType;

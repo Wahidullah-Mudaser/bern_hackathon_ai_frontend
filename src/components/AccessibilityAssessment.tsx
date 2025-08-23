@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import { usePersona } from '@/contexts/PersonaContext';
 import { 
-  Accessibility, Eye, Brain, Heart, BookOpen, Ear, CheckCircle, X
+  Accessibility, Eye, Brain, Heart, BookOpen, Ear, CheckCircle, X, PenLine
 } from 'lucide-react';
 
 const AccessibilityAssessment = () => {
   const { setDisabilityType } = usePersona();
   const [step, setStep] = useState<'question' | 'selection'>('question');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customDisability, setCustomDisability] = useState('');
 
   const disabilities = [
     { id: 'wheelchair', name: 'Wheelchair Assistance', icon: Accessibility, color: 'bg-blue-500' },
@@ -85,8 +88,59 @@ const AccessibilityAssessment = () => {
                     </div>
                     <span className="text-sm font-medium">{disability.name}</span>
                   </Button>
+                  
                 ))}
+                
               </div>
+              
+              {/* Custom Disability Option */}
+              <div className="space-y-4">
+                {!showCustomInput ? (
+                  <Button
+                    variant="outline"
+                    className="w-full h-auto p-4 flex items-center justify-center gap-3 hover:shadow-lg transition-all"
+                    onClick={() => setShowCustomInput(true)}
+                  >
+                    <div className="bg-gray-500 rounded-lg p-2">
+                      <PenLine className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-sm font-medium">Not listed? Write your own</span>
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <Textarea
+                      placeholder="Please describe your accessibility needs..."
+                      value={customDisability}
+                      onChange={(e) => setCustomDisability(e.target.value)}
+                      className="min-h-[80px] resize-none"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        variant="default"
+                        className="flex-1"
+                        onClick={() => {
+                          if (customDisability.trim()) {
+                            setDisabilityType(customDisability.trim());
+                          }
+                        }}
+                        disabled={!customDisability.trim()}
+                      >
+                        Submit Custom Need
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setShowCustomInput(false);
+                          setCustomDisability('');
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
               <div className="text-center">
                 <Button variant="ghost" onClick={() => setStep('question')}>
                   ← Back
