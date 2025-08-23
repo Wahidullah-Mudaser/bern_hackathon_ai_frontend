@@ -170,7 +170,11 @@ const AccessibilityAssessment = () => {
             )}
             <div className="flex gap-3">
               <Button 
-                onClick={() => updatePersona({ assessmentCompleted: true })}
+                onClick={() => {
+                  console.log('Continuing to site with persona:', persona); // Debug log
+                  // Just close the assessment, it's already completed
+                  window.location.reload(); // Force refresh to show updated site
+                }}
                 className="flex-1 bg-primary hover:bg-primary-glow"
               >
                 Continue to Site

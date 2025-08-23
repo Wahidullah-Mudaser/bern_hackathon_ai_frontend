@@ -37,23 +37,29 @@ const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
 
 export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [persona, setPersona] = useState<PersonaData>(defaultPersona);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load persona from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('claire-george-persona');
     if (saved) {
       try {
-        setPersona(JSON.parse(saved));
+        const parsedPersona = JSON.parse(saved);
+        setPersona(parsedPersona);
       } catch (error) {
         console.error('Error loading persona:', error);
+        // If there's an error, keep default persona (shows assessment)
       }
     }
+    setIsLoaded(true);
   }, []);
 
-  // Save persona to localStorage whenever it changes
+  // Save persona to localStorage whenever it changes (but only after initial load)
   useEffect(() => {
-    localStorage.setItem('claire-george-persona', JSON.stringify(persona));
-  }, [persona]);
+    if (isLoaded) {
+      localStorage.setItem('claire-george-persona', JSON.stringify(persona));
+    }
+  }, [persona, isLoaded]);
 
   const updatePersona = (updates: Partial<PersonaData>) => {
     setPersona(prev => ({ ...prev, ...updates }));
@@ -63,6 +69,18 @@ export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setPersona(defaultPersona);
     localStorage.removeItem('claire-george-persona');
   };
+
+  // Don't render children until we've loaded the persona from localStorage
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading Claire & George...</p>
+        </div>
+      </div>
+    );
+  }
 
   const getPersonalizedContent = (content: any) => {
     if (!persona.disabilityType) return content;

@@ -5,27 +5,31 @@ import { ArrowDown, Phone, Mail, Menu, X } from "lucide-react";
 import { usePersona } from "@/contexts/PersonaContext";
 import AccessibilityAssessment from "@/components/AccessibilityAssessment";
 import heroImage from "@/assets/harderkulm-hero.jpg";
+import TestPersonaButton from "@/components/TestPersonaButton";
 
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { persona, getPersonalizedContent } = usePersona();
 
+  console.log('HomePage - persona:', persona); // Debug log
+
   // Show assessment if not completed
   if (!persona.assessmentCompleted) {
     return (
-      <div>
+      <>
         <AccessibilityAssessment />
-        {/* Base website content behind the modal */}
-        <div className="min-h-screen bg-background blur-sm">
+        {/* Base website content behind the modal (blurred) */}
+        <div className="min-h-screen bg-background blur-sm pointer-events-none">
           <BaseHomeContent isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} persona={persona} />
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <div className={`min-h-screen ${persona.preferences.highContrast ? 'bg-black text-white' : 'bg-background'} ${persona.preferences.largeText ? 'text-lg' : ''}`}>
       <BaseHomeContent isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} persona={persona} />
+      <TestPersonaButton />
     </div>
   );
 };
