@@ -93,77 +93,80 @@ const HotelsPage = () => {
       {/* Hotels Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-8 max-w-6xl mx-auto">
+          <div className="grid gap-6 max-w-7xl mx-auto">
             {hotels.map((hotel) => (
-              <Card key={hotel.id} className="overflow-hidden hover:shadow-alpine transition-all duration-300">
-                <div className="md:flex">
+              <Card key={hotel.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-card border border-border">
+                <div className="grid lg:grid-cols-5 gap-0">
                   {/* Hotel Image */}
-                  <div className="md:w-1/3">
-                    <div className="aspect-[4/3] md:h-full bg-gradient-alpine flex items-center justify-center">
-                      <span className="text-white font-semibold">{hotel.name}</span>
+                  <div className="lg:col-span-2">
+                    <div className="aspect-[16/10] lg:h-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-primary-glow/60"></div>
+                      <div className="relative z-10 text-center text-white p-6">
+                        <h4 className="text-xl font-bold mb-2">{hotel.name}</h4>
+                        <div className="flex items-center justify-center gap-1 mb-2">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm">{hotel.location}</span>
+                        </div>
+                        <div className="flex items-center justify-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-4 w-4 ${i < Math.floor(hotel.rating) ? 'text-yellow-300 fill-current' : 'text-white/40'}`} 
+                            />
+                          ))}
+                          <span className="ml-2 text-sm font-semibold">{hotel.rating}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Hotel Details */}
-                  <div className="md:w-2/3 p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-2xl font-bold text-foreground mb-2">{hotel.name}</h3>
-                        <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{hotel.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`h-4 w-4 ${i < Math.floor(hotel.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-                              />
-                            ))}
-                            <span className="ml-2 text-sm font-semibold">{hotel.rating}</span>
-                          </div>
-                        </div>
+                  <div className="lg:col-span-3 p-8">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-3xl font-bold text-foreground mb-3">{hotel.name}</h3>
+                        <p className="text-muted-foreground text-lg leading-relaxed mb-4">{hotel.description}</p>
                       </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-primary">{hotel.price}</div>
+                      <div className="text-right ml-6">
+                        <div className="text-3xl font-bold text-primary">{hotel.price}</div>
                         <div className="text-sm text-muted-foreground">per night</div>
                       </div>
                     </div>
 
-                    <p className="text-muted-foreground mb-4">{hotel.description}</p>
-
-                    {/* Accessibility Features */}
-                    <div className="mb-4">
-                      <h4 className="font-semibold mb-2 flex items-center gap-2">
-                        <Accessibility className="h-4 w-4 text-primary" />
-                        Accessibility Features
+                    {/* Accessibility Features - Prominent */}
+                    <div className="mb-6 p-4 bg-primary/5 rounded-lg border-l-4 border-primary">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-primary">
+                        <Accessibility className="h-5 w-5" />
+                        Wheelchair Accessibility Features
                       </h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {hotel.features.map((feature, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {feature}
-                          </Badge>
+                          <div key={index} className="flex items-center gap-2 text-sm font-medium">
+                            <div className="w-2 h-2 bg-primary rounded-full"></div>
+                            <span>{feature}</span>
+                          </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Amenities */}
                     <div className="mb-6">
-                      <h4 className="font-semibold mb-2">Amenities</h4>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-muted-foreground">
+                      <h4 className="font-semibold text-lg mb-3 text-foreground">Hotel Amenities</h4>
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                         {hotel.amenities.map((amenity, index) => {
                           const getIcon = (amenity: string) => {
-                            if (amenity.includes('WiFi')) return <Wifi className="h-4 w-4" />;
-                            if (amenity.includes('Restaurant')) return <Utensils className="h-4 w-4" />;
-                            if (amenity.includes('Parking')) return <Car className="h-4 w-4" />;
-                            return <span className="h-4 w-4" />;
+                            if (amenity.includes('WiFi')) return <Wifi className="h-5 w-5" />;
+                            if (amenity.includes('Restaurant')) return <Utensils className="h-5 w-5" />;
+                            if (amenity.includes('Parking')) return <Car className="h-5 w-5" />;
+                            return <span className="h-5 w-5" />;
                           };
                           
                           return (
-                            <div key={index} className="flex items-center gap-2">
-                              {getIcon(amenity)}
-                              <span>{amenity}</span>
+                            <div key={index} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                              <div className="text-primary">
+                                {getIcon(amenity)}
+                              </div>
+                              <span className="text-sm font-medium">{amenity}</span>
                             </div>
                           );
                         })}
@@ -171,15 +174,15 @@ const HotelsPage = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      <Button className="bg-primary hover:bg-primary-glow">
+                    <div className="flex flex-wrap gap-4">
+                      <Button size="lg" className="bg-primary hover:bg-primary-glow text-white font-semibold px-8">
                         Book Now
                       </Button>
-                      <Button variant="outline">
+                      <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5 font-semibold px-6">
                         View Details
                       </Button>
-                      <Button variant="ghost">
-                        <Mail className="h-4 w-4 mr-2" />
+                      <Button size="lg" variant="ghost" className="text-muted-foreground hover:text-foreground font-semibold">
+                        <Mail className="h-5 w-5 mr-2" />
                         Contact Hotel
                       </Button>
                     </div>
