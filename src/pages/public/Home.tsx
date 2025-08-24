@@ -7,6 +7,13 @@ import AccessibilityAssessment from "@/components/AccessibilityAssessment";
 import AccessibilityLoadingTransition from "@/components/AccessibilityLoadingTransition";
 import TestAssessmentButton from "@/components/TestAssessmentButton";
 import heroImage from "@/assets/harderkulm-hero.jpg";
+import wheelchairHeroYoung from "@/assets/wheelchair-hero-young.jpg";
+import wheelchairHeroElderly from "@/assets/wheelchair-hero-elderly.jpg";
+import lowVisionHero from "@/assets/low-vision-hero.jpg";
+import cognitiveHero from "@/assets/cognitive-hero.jpg";
+import anxietyHero from "@/assets/anxiety-hero.jpg";
+import dyslexiaHero from "@/assets/dyslexia-hero.jpg";
+import hearingHero from "@/assets/hearing-hero.jpg";
 
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -135,6 +142,26 @@ const HomePage = () => {
     }
   };
 
+  // Get hero image based on disability type
+  const getHeroImage = () => {
+    switch (disabilityType) {
+      case 'wheelchair':
+        return Math.random() > 0.5 ? wheelchairHeroYoung : wheelchairHeroElderly;
+      case 'low-vision':
+        return lowVisionHero;
+      case 'cognitive':
+        return cognitiveHero;
+      case 'anxiety':
+        return anxietyHero;
+      case 'dyslexia':
+        return dyslexiaHero;
+      case 'hearing':
+        return hearingHero;
+      default:
+        return heroImage;
+    }
+  };
+
   const content = getContent();
 
   return (
@@ -216,8 +243,8 @@ const HomePage = () => {
         {/* Hero Section */}
         <section className="relative h-screen flex items-center justify-center">
           <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImage})` }}
+            className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+            style={{ backgroundImage: `url(${getHeroImage()})` }}
           />
           <div className="absolute inset-0 bg-gradient-mountain" />
           
