@@ -832,6 +832,11 @@
                         setTimeout(() => {
                             window.microphone();
                         }, 1000);
+                        
+                        // Auto-send "Hi" message to start conversation
+                        setTimeout(() => {
+                            handleUserQuery("Hi", "Hi", "");
+                        }, 2000);
                     };
                 }
             };
