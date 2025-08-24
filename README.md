@@ -1,73 +1,136 @@
-# Welcome to your Lovable project
+# Claire & George - Accessible Switzerland Travel
 
-## Project info
+A comprehensive web application for accessible tourism services in Switzerland, designed to help travelers with disabilities find suitable accommodations, tours, and support services.
 
-**URL**: https://lovable.dev/projects/9ee02792-721a-4b86-84aa-0f6114b3e308
+## Features
 
-## How can I edit this code?
+- **Accessibility Assessment**: Interactive assessment to determine user accessibility needs
+- **Disability-Specific UI**: Customized user interfaces for different disability types:
+  - Wheelchair accessibility
+  - Low vision support
+  - Cognitive impairment assistance
+  - Anxiety and travel fear support
+  - Dyslexia-friendly design
+  - Hearing impairment support
+- **Hotel Management**: Curated selection of accessible hotels across Switzerland
+- **Tour Services**: Accessible tour packages with specialized support
+- **Care Services**: Additional support services for travelers with disabilities
+- **Content Management System**: Admin interface for managing content and services
 
-There are several ways of editing your application.
+## Technology Stack
 
-**Use Lovable**
+- **Frontend**: React 18 with TypeScript
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Build Tool**: Vite
+- **Routing**: React Router
+- **State Management**: React Context API
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9ee02792-721a-4b86-84aa-0f6114b3e308) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ 
+- npm or yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd bern_hackathon_ai_frontend
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Open your browser and navigate to `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Project Structure
 
-**Use GitHub Codespaces**
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   └── cms/            # CMS-specific components
+├── contexts/           # React contexts (PersonaContext)
+├── pages/              # Page components
+│   └── public/         # Public-facing pages
+├── services/           # API services
+├── assets/             # Static assets
+└── lib/                # Utility functions
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Accessibility Features
 
-## What technologies are used for this project?
+### Disability-Specific UI Adaptations
 
-This project is built with:
+1. **Wheelchair Users**: Blue color scheme, accessibility-focused content
+2. **Low Vision**: High contrast design, larger text, audio descriptions
+3. **Cognitive Impairment**: Simple layouts, clear navigation, step-by-step processes
+4. **Anxiety Support**: Calming blue design, flexible options, clear information
+5. **Dyslexia**: Cream background, Arial font, lowercase text, audio support
+6. **Hearing Impairment**: Visual emphasis, written communication focus
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Technical Accessibility
 
-## How can I deploy this project?
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast ratios
+- Responsive design for all devices
 
-Simply open [Lovable](https://lovable.dev/projects/9ee02792-721a-4b86-84aa-0f6114b3e308) and click on Share -> Publish.
+## Development
 
-## Can I connect a custom domain to my Lovable project?
+### Available Scripts
 
-Yes, you can!
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Code Style
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- TypeScript for type safety
+- ESLint for code quality
+- Prettier for code formatting
+- Conventional commits for version control
+
+## Deployment
+
+The application can be deployed to any static hosting service:
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Deploy the `dist` folder to your hosting service
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support and questions, please contact:
+- Email: contact@claireundgeorge.ch
+- Phone: +41 31 301 55 65
+
+## About Claire & George
+
+Claire & George is dedicated to making Switzerland accessible to all travelers, regardless of their abilities. We provide comprehensive accessible tourism services including accommodation, tours, and support services tailored to individual needs.

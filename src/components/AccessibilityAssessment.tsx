@@ -22,6 +22,14 @@ const AccessibilityAssessment = () => {
     { id: 'hearing', name: 'Hearing Support', icon: Ear, color: 'bg-indigo-500' },
   ];
 
+  const handleDisabilitySelection = (disabilityId: string) => {
+    if (disabilityId === 'low-vision') {
+      // Open avatar chat page in new tab for low vision users
+      window.open('/avatar/chat-direct.html', '_blank');
+    }
+    setDisabilityType(disabilityId as any);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl animate-scale-in">
@@ -81,7 +89,7 @@ const AccessibilityAssessment = () => {
                     key={disability.id}
                     variant="outline"
                     className="h-auto p-4 flex-col gap-3 hover:shadow-lg transition-all"
-                    onClick={() => setDisabilityType(disability.id as any)}
+                    onClick={() => handleDisabilitySelection(disability.id)}
                   >
                     <div className={`${disability.color} rounded-lg p-2`}>
                       <disability.icon className="h-5 w-5 text-white" />

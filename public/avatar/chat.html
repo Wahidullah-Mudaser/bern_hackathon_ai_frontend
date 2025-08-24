@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talking Avatar Chat Demo</title>
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+    <script src="./js/chat.js"></script>
+</head>
+<body style="
+  background: linear-gradient(135deg, #e2f1f8ff 0%, #1e9bcf 50%, #b4c7e7 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0 20px 20px 20px;
+  height: auto;
+">
+<h1 style="
+  text-align: center;
+  color: #ffffff;
+  font-size: 2.5em;
+  margin: 20px 0 20px 0;
+  font-weight: 300;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+">Talking Avatar Chat Demo</h1>
+
+<div id="configuration">
+  <h2 style="background-color: #16608a; color: white; width: 300px; padding: 10px; border-radius: 8px;">Azure Speech Resource</h2>
+  <label style="font-size: medium;" for="region">Region:</label>
+  <select id="region" style="font-size: medium;">
+    <option value="westeurope">West Europe</option>
+
+  </select>
+  <label style="font-size: medium;" for="APIKey">API Key:</label>
+  <input id="APIKey" type="password" size="32" style="font-size: medium;" value="9l3CmXiyadFyKHGXz1aWji76DwiBU2472pHP1Wo8JQvgm7UsdwMCJQQJ99BHAC5RqLJXJ3w3AAAYACOGB8xB" />
+  <div style="background-color: #b4c7e7; width: 300px; padding: 10px; border-radius: 8px;">
+    <input type="checkbox" id="enablePrivateEndpoint" onchange = "window.updatePrivateEndpoint()">Enable Private Endpoint</input><br />
+  </div>
+  <div id = "showPrivateEndpointCheckBox" hidden="hidden">
+    <label style="font-size: medium;" for="privateEndpoint">Private Endpoint:</label>
+    <input id="privateEndpoint" type="text" size="64" style="font-size: medium;" placeholder="https://{your custom name}.cognitiveservices.azure.com/"></input><br />
+  </div><br />
+
+  <h2 style="background-color: #16608a; color: white; width: 300px; padding: 10px; border-radius: 8px;">Azure OpenAI Resource</h2>
+  <label style="font-size: medium;" for="azureOpenAIEndpoint">Endpoint:</label>
+  <input id="azureOpenAIEndpoint" type="text" size="64" style="font-size: medium;" value="https://psiopenai1.openai.azure.com/"></input><br />
+  <label style="font-size: medium;" for="azureOpenAIApiKey">API Key:</label>
+  <input id="azureOpenAIApiKey" type="password" size="32" style="font-size: medium;" value="BGJdTRVRg4C6Ij3fNpSM86neFtAuyNhqYmpBzhQlCR8PkkO4U4NBJQQJ99BHAC5RqLJXJ3w3AAABACOGF0f3"/><br />
+  <label style="font-size: medium;" for="azureOpenAIDeploymentName">Deployment Name:</label>
+  <input id="azureOpenAIDeploymentName" type="text" size="32" style="font-size: medium;" value="gpt-4o"/><br />
+  <label style="font-size: medium;"  for="prompt">System Prompt:</label><br/>
+  <textarea id="prompt" style="width: 640px;">You must ask the user the following question in a clear and strict manner and wait for their response:
+
+"Do you have any disability, medical condition, or special requirement that should be noted? If yes, clearly specify the type of disability or condition and include any important details or considerations."
+
+Rules for handling responses:
+
+If the user says "No", acknowledge with "Okay, noted." and do not ask again.
+
+If the user mentions wheelchair or mobility issues, respond with: "Okay, I understand you have an issue related to wheelchair use." Do not provide additional details.
+
+If the user mentions blindness or vision impairment, then:
+
+You must read/explain website content only when the user asks a specific query.
+
+Keep answers short, precise, and limited strictly to the user’s query.
+
+Do not add extra information beyond what is asked.
+
+For any other disability/condition, just acknowledge with: "Okay, I understand."</textarea>
+  <div style="background-color: #b4c7e7; width: 300px; padding: 10px; border-radius: 8px;">
+    <input type="checkbox" id="enableOyd" onchange="window.updataEnableOyd()">Enable On Your Data</input><br />
+  </div>
+  <br />
+
+  <div id="cogSearchConfig" hidden="hidden">
+    <h2 style="background-color: #16608a; color: white; width: 400px; padding: 10px; border-radius: 8px;">Azure Cognitive Search Resource</h2>
+    <label style="font-size: medium;" for="azureCogSearchEndpoint">Endpoint:</label>
+    <input id="azureCogSearchEndpoint" type="text" size="64" style="font-size: medium;"></input><br />
+    <label style="font-size: medium;" for="azureCogSearchApiKey">API Key:</label>
+    <input id="azureCogSearchApiKey" type="password" size="32" style="font-size: medium;" /><br />
+    <label style="font-size: medium;" for="azureCogSearchIndexName">Index Name:</label>
+    <input id="azureCogSearchIndexName" type="text" size="32" style="font-size: medium;" /><br />
+    <br />
+  </div>
+
+  <h2 style="background-color: #16608a; color: white; width: 300px; padding: 10px; border-radius: 8px;">STT / TTS Configuration</h2>
+  <label style="font-size: medium;" for="sttLocale">STT Locale(s):</label>
+  <input id="sttLocales" type="text" size="64" style="font-size: medium;" value="en-US,de-DE,es-ES,fr-FR,it-IT,ja-JP,ko-KR,zh-CN"></input><br />
+  <label style="font-size: medium;" for="ttsVoice">TTS Voice:</label>
+  <input id="ttsVoice" type="text" size="32" style="font-size: medium;" value="en-US-AvaMultilingualNeural"></input><br />
+  <label style="font-size: medium;" for="customVoiceEndpointId">Custom Voice Deployment ID (Endpoint ID):</label>
+  <input id="customVoiceEndpointId" type="text" size="32" style="font-size: medium;" value=""></input><br />
+  <div style="background-color: #b4c7e7; width: 300px; padding: 10px; border-radius: 8px;">
+    <input type="checkbox" id="continuousConversation" checked>Continuous Conversation</input><br />
+  </div>
+  <br />
+
+  <h2 style="background-color: #16608a; color: white; width: 300px; padding: 10px; border-radius: 8px;">Avatar Configuration</h2>
+  <label style="font-size: medium;" for="talkingAvatarCharacter">Avatar Character:</label>
+  <input id="talkingAvatarCharacter" type="text" size="16" style="font-size: medium;" value="lisa"></input><br />
+  <label style="font-size: medium;" for="talkingAvatarStyle">Avatar Style:</label>
+  <input id="talkingAvatarStyle" type="text" size="16" style="font-size: medium;" value="casual-sitting"></input><br />
+  <div style="background-color: #b4c7e7; width: 400px; padding: 10px; border-radius: 8px;">
+    <input type="checkbox" id="customizedAvatar" onchange="window.updateCustomAvatarBox()">Custom Avatar</input>
+    <input type="checkbox" id="useBuiltInVoice" style="width: 12px;" disabled>Use Built-In Voice</input><br />
+  </div>
+  <div style="background-color: #b4c7e7; width: 200px; padding: 10px; border-radius: 8px; margin-top: 5px;">
+    <input type="checkbox" id="autoReconnectAvatar">Auto Reconnect</input><br />
+  </div>
+  <div style="background-color: #b4c7e7; width: 200px; padding: 10px; border-radius: 8px; margin-top: 5px;">
+    <input type="checkbox" id="useLocalVideoForIdle" onchange="window.updateLocalVideoForIdle()">Use Local Video for Idle</input><br />
+  </div>
+  <div style="background-color: #b4c7e7; width: 200px; padding: 10px; border-radius: 8px; margin-top: 5px;">
+    <input type="checkbox" id="showSubtitles">Show Subtitles</input><br />
+  </div>
+  <br />
+</div>
+
+<div style="text-align: center; margin: 10px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+<button id="startSession" onclick="window.startSession()" style="
+  background: linear-gradient(135deg, #16608a 0%, #1e9bcf 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(22, 96, 138, 0.3);
+" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(22, 96, 138, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(22, 96, 138, 0.3)'">Open Avatar Session</button>
+</div>
+
+    <!-- Main Content Container for Side-by-Side Layout -->
+    <div id="mainContentContainer" style="display: none; flex-direction: column; gap: 0; width: 100%; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+      <!-- Main Card Container -->
+      <div class="main-chat-card" style="
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        margin: 20px auto 0 auto;
+        width: 100%;
+        max-width: 1200px;
+        min-height: 600px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 2;
+      ">
+        <!-- Left Side: Chat Interface -->
+        <div class="chat-sidebar" style="
+          flex: 1;
+          background: linear-gradient(135deg, #16608a 0%, #1e9bcf 100%);
+          display: flex;
+          flex-direction: column;
+          min-height: 600px;
+        ">
+          <div class="chat-interface" style="
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 600px;
+            max-height: 600px;
+          ">
+            <div class="chat-header" style="
+              padding: 20px;
+              background: rgba(255, 255, 255, 0.1);
+              backdrop-filter: blur(10px);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            ">
+              <div class="chat-title" style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+              ">
+                <span class="chat-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                  </svg>
+                </span>
+                <h3 style="color: white; margin: 0; font-size: 18px; font-weight: 600;">Conversation</h3>
+              </div>
+              <div class="chat-controls">
+                <button class="chat-control-btn" onclick="window.clearChatHistory()" title="Clear Chat" style="
+                  background: rgba(255, 255, 255, 0.2);
+                  border: none;
+                  border-radius: 8px;
+                  padding: 8px;
+                  cursor: pointer;
+                  transition: background 0.3s ease;
+                " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="chat-messages" id="chatHistory" style="
+              flex: 1;
+              overflow-y: auto;
+              padding: 20px;
+              background: rgba(255, 255, 255, 0.05);
+              min-height: 0;
+              max-height: 400px;
+              height: 400px;
+            ">
+              <div class="message-group">
+                <!-- Messages will be added dynamically here -->
+              </div>
+            </div>
+            
+            <!-- Toggle Switch for Text Chat (Bottom of Chat Sidebar) -->
+            <div id="chatToggleContainer" style="
+              flex-shrink: 0;
+              padding: 3px 20px;
+              border-top: 1px solid rgba(255, 255, 255, 0.2);
+              background: rgba(255, 255, 255, 0.05);
+              margin-top: auto;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            ">
+              <label class="toggle-switch" style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                font-weight: 500;
+                color: white;
+                font-size: 14px;
+              ">
+                <!-- Simple Toggle Switch -->
+                <div class="custom-toggle" id="customToggle" style="
+                  position: relative;
+                  width: 36px;
+                  height: 18px;
+                  background-color: rgba(255, 255, 255, 0.4);
+                  border-radius: 9px;
+                  border: 1px solid white;
+                  transition: background-color 0.3s ease;
+                  cursor: pointer;
+                ">
+                  <div class="slider-dot" id="sliderDot" style="
+                    position: absolute;
+                    top: 1px;
+                    left: 1px;
+                    width: 14px;
+                    height: 14px;
+                    background-color: white;
+                    border-radius: 50%;
+                    transition: transform 0.3s ease;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+                  "></div>
+                </div>
+                <input type="checkbox" id="showTypeMessage" onchange="updateToggleVisual()" checked style="display: none;">
+                <span class="toggle-label" style="color: white;">💬 Enable Text Chat</span>
+              </label>
+              
+              <!-- Microphone Button on the Right -->
+              <button id="microphone" onclick="window.microphone()" disabled style="
+                background: linear-gradient(135deg, #1e9bcf 0%, #16608a 100%);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+                opacity: 0.6;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+              " onmouseover="if(!this.disabled) { this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(30, 155, 207, 0.4)'; this.style.opacity='1'; }" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(30, 155, 207, 0.3)'; if(this.disabled) this.style.opacity='0.6';">
+                🎤 Start Microphone
+              </button>
+              
+              <script>
+                function updateToggleVisual() {
+                  const checkbox = document.getElementById('showTypeMessage');
+                  const toggle = document.getElementById('customToggle');
+                  const slider = document.getElementById('sliderDot');
+                  
+                  if (checkbox.checked) {
+                    toggle.style.backgroundColor = '#16608a';
+                    slider.style.transform = 'translateX(18px)';
+                  } else {
+                    toggle.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                    slider.style.transform = 'translateX(0)';
+                  }
+                  window.updateTypeMessageBox();
+                }
+                
+                document.getElementById('customToggle').addEventListener('click', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const checkbox = document.getElementById('showTypeMessage');
+                  checkbox.checked = !checkbox.checked;
+                  updateToggleVisual();
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Side: Avatar Video -->
+        <div class="avatar-main" style="
+          flex: 1;
+          background: #b4c7e7;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          min-height: 600px;
+        ">
+          <div id="videoContainer" style="
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 500px;
+          ">
+            <div id="localVideo" hidden>
+              <video src="video/lisa-casual-sitting-idle.mp4" autoplay loop muted style="
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0 20px 20px 0;
+              "></video>
+            </div>
+            <div id="remoteVideo" style="
+              width: 100%;
+              height: 100%;
+            "></div>
+            <div id="subtitles" style="
+                width: 100%;
+                text-align: center;
+                color: white; 
+                text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+                font-size: 22px; 
+                position: absolute; 
+                bottom: 5%; 
+                z-index: 999;
+                background: rgba(0, 0, 0, 0.5);
+                padding: 10px;
+                border-radius: 8px;
+                margin: 0 20px;
+            " hidden></div>
+          </div>
+          
+          <!-- Avatar Controls Container (Bottom of Avatar Area) -->
+          <div id="avatarControlsContainer" style="
+            flex-shrink: 0;
+            padding: 10px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 1);
+            margin-top: auto;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0 0 20px 0;
+            width: 100%;
+            min-height: 60px;
+          ">
+            <div style="
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            ">            
+            <div style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+            ">
+            <!-- Stop Speaking Button -->
+            <button id="stopSpeaking" onclick="stopSpeaking()" disabled style="
+              background: linear-gradient(135deg, #124869 0%, #16608a 100%);
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 12px;
+              font-weight: 500;
+              transition: all 0.3s ease;
+              box-shadow: 0 2px 8px rgba(22, 96, 138, 0.3);
+              opacity: 0.6;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              margin: 0 15px;
+            " onmouseover="if(!this.disabled) { this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255, 150, 0, 0.4)'; this.style.opacity='1'; }" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(255, 150, 0, 0.3)'; if(this.disabled) this.style.opacity='0.6';">
+              🔇 Stop Speaking
+            </button>
+            
+            <!-- Close Avatar Session Button -->
+            <button id="stopSession" onclick="window.stopSession()" disabled style="
+              background: linear-gradient(135deg, #124869 0%, #16608a 100%);
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 12px;
+              font-weight: 500;
+              transition: all 0.3s ease;
+              box-shadow: 0 2px 8px #16608a;
+              opacity: 0.6;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              margin: 0 15px;
+            " onmouseover="if(!this.disabled) { this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(73, 94, 139, 0.4)'; this.style.opacity='1'; }" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(147, 147, 147, 0.3)'; if(this.disabled) this.style.opacity='0.6';">
+              ❌ Close Avatar Session
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Enhanced Chat Input Section -->
+    <div class="chat-input-section" id="chatInputSection" style="
+      background: linear-gradient(135deg, #16608a 0%, #1e9bcf 100%);
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      margin: 0 auto 20px auto;
+      width: 100%;
+      max-width: 1400px;
+      padding: 20px;
+      display: block;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+    ">
+      <div class="modern-message-container">
+        <div class="message-input-wrapper" style="
+          background: #ffffffff;
+          border: 2px solid #16608a;
+          border-radius: 12px;
+          padding: 12px;
+          display: flex;
+          align-items: flex-end;
+          gap: 10px;
+          transition: border-color 0.3s ease;
+        " onfocus="this.style.borderColor='#1e9bcf'" onblur="this.style.borderColor='#16608a'">
+          <div id="userMessageBox" class="modern-message-input" contentEditable="true" placeholder="Type your message here... Press Enter to send" style="
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            overflow-y: auto;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #333;
+            padding: 8px 0;
+          "></div>
+          <div class="input-actions" style="
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          ">
+            <button class="action-btn attachment-btn" title="Attach file" style="
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              padding: 8px;
+              border-radius: 8px;
+              transition: background 0.3s ease;
+            " onmouseover="this.style.background='#16608a'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='inherit'">
+              <img id="uploadImgIcon" src="./image/attachment.jpg" alt="Attach" style="width: 20px; height: 20px;" />
+            </button>
+            <button class="action-btn send-btn" onclick="window.sendMessage()" title="Send message" style="
+              background: linear-gradient(135deg, #16608a 0%, #1e9bcf 100%);
+              border: none;
+              border-radius: 8px;
+              padding: 10px;
+              cursor: pointer;
+              transition: transform 0.2s ease;
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="input-suggestions" style="
+          display: flex;
+          gap: 8px;
+          margin-top: 12px;
+          flex-wrap: wrap;
+        ">
+          <span class="suggestion-chip" onclick="window.insertSuggestion('Hello, how are you?')" style="
+            background: #b4c7e7;
+            border: 1px solid #16608a;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #16608a;
+          " onmouseover="this.style.background='#16608a'; this.style.borderColor='#1e9bcf'; this.style.color='white'" onmouseout="this.style.background='#b4c7e7'; this.style.borderColor='#16608a'; this.style.color='#16608a'">👋 Hello</span>
+          <span class="suggestion-chip" onclick="window.insertSuggestion('Can you help me with...')" style="
+            background: #b4c7e7;
+            border: 1px solid #16608a;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #16608a;
+          " onmouseover="this.style.background='#16608a'; this.style.borderColor='#1e9bcf'; this.style.color='white'" onmouseout="this.style.background='#b4c7e7'; this.style.borderColor='#16608a'; this.style.color='#16608a'">❓ Ask for help</span>
+          <span class="suggestion-chip" onclick="window.insertSuggestion('Tell me about...')" style="
+            background: #b4c7e7;
+            border: 1px solid #16608a;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #16608a;
+          " onmouseover="this.style.background='#16608a'; this.style.borderColor='#1e9bcf'; this.style.color='white'" onmouseout="this.style.background='#b4c7e7'; this.style.borderColor='#16608a'; this.style.color='#16608a'">💡 Learn more</span>
+          <span class="suggestion-chip" onclick="window.insertSuggestion('Thank you!')" style="
+            background: #b4c7e7;
+            border: 1px solid #16608a;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #16608a;
+          " onmouseover="this.style.background='#16608a'; this.style.borderColor='#1e9bcf'; this.style.color='white'" onmouseout="this.style.background='#b4c7e7'; this.style.borderColor='#16608a'; this.style.color='#16608a'">🙏 Thank you</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+// Initialize functionality when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure main content container is hidden initially
+    window.hideChatInterface();
+    
+    // Initialize the toggle state
+    window.updateTypeMessageBox();
+    
+    // Update toggle visual state to match the default checked state
+    if (typeof updateToggleVisual === 'function') {
+        updateToggleVisual();
+    }
+    
+    // Add event listeners for buttons
+    const sendBtn = document.querySelector('.send-btn');
+    if (sendBtn) {
+        sendBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.sendMessage();
+        });
+    }
+});
+</script>
+
+</html>
