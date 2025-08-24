@@ -5,6 +5,7 @@ export type DisabilityType = 'wheelchair' | 'low-vision' | 'cognitive' | 'anxiet
 interface PersonaContextType {
   disabilityType: DisabilityType;
   showAssessment: boolean;
+  isLoading: boolean;
   setDisabilityType: (type: DisabilityType) => void;
   resetAssessment: () => void;
 }
@@ -14,6 +15,7 @@ const PersonaContext = createContext<PersonaContextType | undefined>(undefined);
 export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [disabilityType, setDisabilityTypeState] = useState<DisabilityType>(null);
   const [showAssessment, setShowAssessment] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load from localStorage on mount and show assessment if no preference saved
   useEffect(() => {
@@ -31,9 +33,22 @@ export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   const setDisabilityType = (type: DisabilityType) => {
-    setDisabilityTypeState(type);
-    setShowAssessment(false);
-    localStorage.setItem('claire-george-disability', type || 'null');
+    if (type && type !== 'null') {
+      // Start loading for 3 seconds before applying changes
+      setIsLoading(true);
+      setShowAssessment(false);
+      
+      setTimeout(() => {
+        setDisabilityTypeState(type);
+        setIsLoading(false);
+        localStorage.setItem('claire-george-disability', type || 'null');
+      }, 3000);
+    } else {
+      // No loading for null/no disability selection
+      setDisabilityTypeState(type);
+      setShowAssessment(false);
+      localStorage.setItem('claire-george-disability', type || 'null');
+    }
   };
 
   const resetAssessment = () => {
@@ -44,7 +59,7 @@ export const PersonaProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <PersonaContext.Provider value={{ disabilityType, showAssessment, setDisabilityType, resetAssessment }}>
+    <PersonaContext.Provider value={{ disabilityType, showAssessment, isLoading, setDisabilityType, resetAssessment }}>
       <div className={`persona-${disabilityType || 'default'}`}>
         {children}
       </div>

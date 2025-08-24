@@ -124,51 +124,105 @@ All colors MUST be HSL.
 
   /* Wheelchair user optimizations */
   .persona-wheelchair {
-    --primary: 220 75% 45%; /* Blue focus */
+    --primary: 220 75% 45%; /* Blue focus for accessibility */
+    --secondary: 220 50% 96%;
+    --accent: 220 75% 50%;
+    --border: 220 50% 85%;
+  }
+  .persona-wheelchair .service-card {
+    border: 2px solid hsl(220 75% 45%);
+  }
+  .persona-wheelchair .accessibility-highlight {
+    background: linear-gradient(135deg, hsl(220 75% 45% / 0.1), hsl(220 75% 55% / 0.05));
+    border-left: 4px solid hsl(220 75% 45%);
   }
 
   /* Low vision optimizations */
   .persona-low-vision {
-    --background: 0 0% 5%; /* Dark background */
-    --foreground: 0 0% 95%; /* Light text */
-    --primary: 50 100% 60%; /* High contrast yellow */
-    font-size: 1.25rem; /* Larger base text */
+    --background: 0 0% 8%; /* Dark background for contrast */
+    --foreground: 0 0% 98%; /* Very light text */
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+    --primary: 50 100% 65%; /* High contrast yellow */
+    --secondary: 0 0% 15%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 85%;
+    --border: 0 0% 20%;
+    font-size: 1.3rem; /* Larger base text */
+    line-height: 1.6;
   }
   .persona-low-vision * {
-    font-weight: 600 !important; /* Bolder text */
+    font-weight: 600 !important; /* Bolder text for visibility */
+  }
+  .persona-low-vision .high-contrast {
+    background: hsl(50 100% 65%) !important;
+    color: hsl(0 0% 0%) !important;
+    border: 3px solid hsl(50 100% 50%) !important;
   }
 
   /* Cognitive support optimizations */
   .persona-cognitive {
-    --primary: 150 75% 45%; /* Calming green */
-    font-size: 1.125rem;
+    --primary: 150 60% 40%; /* Calming green */
+    --secondary: 150 30% 95%;
+    --accent: 150 60% 45%;
+    font-size: 1.2rem;
+    line-height: 1.7;
   }
   .persona-cognitive .complex-layout {
     display: none; /* Hide complex elements */
   }
+  .persona-cognitive .simple-card {
+    border: 2px solid hsl(150 60% 40%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    background: hsl(150 30% 98%);
+  }
 
   /* Anxiety support optimizations */
   .persona-anxiety {
-    --primary: 200 75% 45%; /* Calming blue */
-    --background: 200 20% 98%; /* Soft background */
+    --primary: 200 70% 40%; /* Calming blue */
+    --background: 200 30% 98%; /* Very soft background */
+    --secondary: 200 25% 94%;
+    --accent: 200 70% 45%;
+    --border: 200 40% 90%;
   }
   .persona-anxiety .stress-element {
     display: none; /* Hide potentially stressful elements */
   }
+  .persona-anxiety .calming-section {
+    background: linear-gradient(135deg, hsl(200 30% 98%), hsl(200 40% 96%));
+    border: 1px solid hsl(200 40% 85%);
+    border-radius: 16px;
+  }
 
   /* Dyslexia support optimizations */
   .persona-dyslexia {
-    --primary: 30 75% 45%; /* Warm orange */
-    font-family: 'OpenDyslexic', sans-serif;
-    font-size: 1.125rem;
+    --primary: 30 70% 45%; /* Warm orange */
+    --secondary: 30 30% 95%;
+    --accent: 30 70% 50%;
+    font-family: Arial, Helvetica, sans-serif; /* Dyslexia-friendly font */
+    font-size: 1.2rem;
     line-height: 1.8;
+    letter-spacing: 0.05em;
+  }
+  .persona-dyslexia .readable-text {
+    background: hsl(30 30% 98%);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid hsl(30 70% 45%);
   }
 
   /* Hearing impairment optimizations */
   .persona-hearing {
-    --primary: 250 75% 45%; /* Purple focus */
+    --primary: 280 70% 45%; /* Purple focus */
+    --secondary: 280 30% 95%;
+    --accent: 280 70% 50%;
   }
   .persona-hearing .audio-only {
     display: none; /* Hide audio-only content */
+  }
+  .persona-hearing .visual-emphasis {
+    border: 3px solid hsl(280 70% 45%);
+    background: hsl(280 30% 98%);
   }
 }

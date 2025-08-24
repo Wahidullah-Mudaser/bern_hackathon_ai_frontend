@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { ArrowDown, Phone, Mail, Menu, X } from "lucide-react";
 import { usePersona } from "@/contexts/PersonaContext";
 import AccessibilityAssessment from "@/components/AccessibilityAssessment";
+import AccessibilityLoadingTransition from "@/components/AccessibilityLoadingTransition";
 import TestAssessmentButton from "@/components/TestAssessmentButton";
 import heroImage from "@/assets/harderkulm-hero.jpg";
 
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { disabilityType, showAssessment, resetAssessment } = usePersona();
+  const { disabilityType, showAssessment, isLoading, resetAssessment, setDisabilityType } = usePersona();
 
   // Content variants based on disability type
   const getContent = () => {
@@ -42,39 +43,90 @@ const HomePage = () => {
       case 'wheelchair':
         return {
           ...base,
-          subtitle: "Your trusted partner for wheelchair-accessible travel in Switzerland.",
+          title: "Wheelchair-Accessible Switzerland",
+          subtitle: "Barrier-free travel with complete wheelchair accessibility. We ensure ramps, elevators, accessible bathrooms, and adapted transportation for your comfort.",
           services: base.services.map(s => ({
             ...s,
             description: s.title.includes('Hotels') 
-              ? "Fully wheelchair accessible hotels with ramps, elevators, and accessible bathrooms."
+              ? "🏨 Fully wheelchair accessible hotels with: wide doors (32+ inches), roll-in showers, accessible bathrooms, ramps, elevators, and designated parking."
               : s.title.includes('Tours')
-              ? "Wheelchair-accessible tours with adapted transportation and viewing areas."
-              : "Mobility assistance and wheelchair equipment rental services."
+              ? "🚌 Wheelchair-accessible tours with adapted vehicles, accessible viewing areas, and smooth pathways. All routes are pre-checked for mobility."
+              : "♿ Professional mobility assistance: wheelchair rentals, transfer services, accessibility equipment, and 24/7 mobility support."
           }))
         };
       
       case 'anxiety':
         return {
           ...base,
-          subtitle: "Your calm, supportive partner for stress-free holidays in Switzerland.",
+          title: "Stress-Free Switzerland",
+          subtitle: "Calm, predictable travel with full support. We provide detailed information, flexible cancellation, and 24/7 assistance to ease your travel worries.",
           services: base.services.map(s => ({
             ...s,
             description: s.title.includes('Care')
-              ? "24/7 support and calming environments designed to reduce travel anxiety."
-              : s.description
+              ? "🛡️ Complete support system: 24/7 helpline, pre-trip consultations, detailed itineraries, emergency contacts, and calming spaces at all locations."
+              : s.title.includes('Hotels')
+              ? "🏩 Carefully selected quiet hotels with: peaceful environments, flexible check-in/out, easy cancellation, and staff trained in anxiety support."
+              : "🧘 Gentle, low-stress tours with: small groups, predictable schedules, frequent breaks, and easy exit options if needed."
           }))
         };
       
       case 'cognitive':
         return {
           ...base,
-          title: "Easy Travel in Switzerland",
-          subtitle: "We help make your Swiss holiday simple and stress-free.",
+          title: "Simple Travel in Switzerland",
+          subtitle: "Easy trips made simple. Clear steps. Extra help. No stress.",
           services: base.services.map(s => ({
             ...s,
-            description: s.title.includes('Tours')
-              ? "Simple tours with clear steps and extra support."
-              : s.description.length > 60 ? s.description.substring(0, 60) + "..." : s.description
+            description: s.title.includes('Hotels')
+              ? "🏨 Easy hotels. Simple check-in. Clear rooms. Helpful staff."
+              : s.title.includes('Tours')
+              ? "🚌 Simple tours. Clear steps. Extra help. Small groups."
+              : "🤝 Extra care. Simple booking. Clear info. Always ready to help."
+          }))
+        };
+      
+      case 'low-vision':
+        return {
+          ...base,
+          title: "High-Contrast Switzerland",
+          subtitle: "Enhanced visibility and audio support for low vision travelers. Large text, high contrast displays, and detailed audio descriptions throughout your journey.",
+          services: base.services.map(s => ({
+            ...s,
+            description: s.title.includes('Hotels')
+              ? "🏨 Vision-friendly hotels with: large print information, high-contrast signage, audio room descriptions, tactile maps, and voice-guided navigation."
+              : s.title.includes('Tours')
+              ? "🎧 Audio-enhanced tours with: detailed verbal descriptions, tactile elements, high-contrast materials, and trained guides for vision support."
+              : "👁️ Vision support services: magnification tools, audio guides, large print materials, and assistive technology throughout your stay."
+          }))
+        };
+      
+      case 'dyslexia':
+        return {
+          ...base,
+          title: "Clear Reading Switzerland", 
+          subtitle: "Simple words. Easy reading. Clear text. We use short sentences and simple language.",
+          services: base.services.map(s => ({
+            ...s,
+            description: s.title.includes('Hotels')
+              ? "🏨 Easy-to-read hotel info. Simple booking. Clear signs. Helpful pictures."
+              : s.title.includes('Tours')  
+              ? "📖 Simple tour guides. Easy maps. Clear steps. Pictures help explain."
+              : "📝 Simple booking forms. Easy words. Clear help. Staff who understand."
+          }))
+        };
+      
+      case 'hearing':
+        return {
+          ...base,
+          title: "Visual Switzerland",
+          subtitle: "Full visual communication and sign language support. Written information, visual alerts, and deaf-friendly services throughout Switzerland.",
+          services: base.services.map(s => ({
+            ...s,
+            description: s.title.includes('Hotels')
+              ? "🏨 Hearing-accessible hotels with: visual alerts, written communication, sign language staff, text-based services, and vibrating alarms."
+              : s.title.includes('Tours')
+              ? "👀 Visual tours with: written guides, sign language interpreters, visual demonstrations, and captioned presentations when available."
+              : "👋 Deaf-friendly services: sign language support, written communication, text alerts, and visual notification systems."
           }))
         };
       
@@ -88,6 +140,12 @@ const HomePage = () => {
   return (
     <>
       {showAssessment && <AccessibilityAssessment />}
+      {isLoading && (
+        <AccessibilityLoadingTransition 
+          disabilityType={disabilityType}
+          onComplete={() => {}}
+        />
+      )}
       
       <div className="min-h-screen bg-background">
         {/* Header */}
@@ -206,7 +264,14 @@ const HomePage = () => {
             
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {content.services.map((service, index) => (
-                <div key={index} className="bg-background rounded-lg overflow-hidden shadow-alpine hover:shadow-magenta transition-all duration-300">
+                <div key={index} className={`bg-background rounded-lg overflow-hidden shadow-alpine hover:shadow-magenta transition-all duration-300 service-card ${
+                  disabilityType === 'wheelchair' ? 'accessibility-highlight' :
+                  disabilityType === 'cognitive' ? 'simple-card' :
+                  disabilityType === 'anxiety' ? 'calming-section' :
+                  disabilityType === 'dyslexia' ? 'readable-text' :
+                  disabilityType === 'low-vision' ? 'high-contrast' :
+                  disabilityType === 'hearing' ? 'visual-emphasis' : ''
+                }`}>
                   <div className="aspect-[2/1] bg-gradient-alpine flex items-center justify-center">
                     <span className="text-white font-semibold">{service.title}</span>
                   </div>
