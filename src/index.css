@@ -165,6 +165,12 @@ All colors MUST be HSL.
     --primary: 150 60% 40%; /* Calming green */
     --secondary: 150 30% 95%;
     --accent: 150 60% 45%;
+    --background: 150 30% 98%; /* Very light green background */
+    --card: 150 30% 99%;
+    --card-foreground: 210 15% 25%;
+    --muted: 150 30% 92%;
+    --muted-foreground: 210 15% 35%;
+    --border: 150 40% 85%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.2rem;
     line-height: 1.8;
@@ -177,26 +183,138 @@ All colors MUST be HSL.
   .persona-cognitive h1, .persona-cognitive h2, .persona-cognitive h3 {
     margin-bottom: 1rem !important;
     font-weight: 600 !important;
+    color: hsl(210 15% 25%) !important;
   }
   .persona-cognitive p {
     margin-bottom: 1rem !important;
     max-width: 60ch !important;
+    color: hsl(210 15% 25%) !important;
   }
   .persona-cognitive .complex-layout {
     display: none; /* Hide complex elements */
   }
   .persona-cognitive .simple-card {
-    border: 2px solid hsl(150 60% 40%);
-    border-radius: 12px;
+    border: 3px solid hsl(150 60% 40%);
+    border-radius: 16px;
     padding: 2rem;
     background: hsl(150 30% 98%);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   .persona-cognitive button {
     padding: 1rem 2rem !important;
     font-size: 1.1rem !important;
     font-weight: 600 !important;
-    border: 2px solid hsl(150 60% 40%) !important;
+    border: 3px solid hsl(150 60% 40%) !important;
+    border-radius: 12px !important;
+    background: hsl(150 60% 40%) !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+  }
+  .persona-cognitive button:hover {
+    background: hsl(150 60% 35%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  .persona-cognitive .step-process {
+    background: hsl(150 30% 98%);
+    border: 3px solid hsl(150 60% 40%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .persona-cognitive .step-number {
+    background: hsl(150 60% 40%);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+  }
+  .persona-cognitive .clear-label {
+    font-weight: 600 !important;
+    color: hsl(150 60% 40%) !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .persona-cognitive .helpful-reminder {
+    background: hsl(150 40% 95%);
+    border-left: 4px solid hsl(150 60% 40%);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+  }
+  .persona-cognitive .progressive-disclosure {
+    border: 2px solid hsl(150 40% 85%);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  .persona-cognitive .progressive-disclosure-header {
+    background: hsl(150 30% 95%);
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 10px 10px 0 0;
+    font-weight: 600;
+  }
+  .persona-cognitive .progressive-disclosure-content {
+    padding: 1rem;
+    background: white;
+    border-radius: 0 0 10px 10px;
+  }
+  .persona-cognitive .error-message {
+    background: hsl(0 70% 95%);
+    border: 2px solid hsl(0 70% 60%);
+    color: hsl(0 70% 30%);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-weight: 600;
+  }
+  .persona-cognitive .success-message {
+    background: hsl(150 70% 95%);
+    border: 2px solid hsl(150 70% 60%);
+    color: hsl(150 70% 30%);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-weight: 600;
+  }
+  .persona-cognitive .navigation-consistent {
+    background: hsl(150 30% 95%);
+    border-bottom: 3px solid hsl(150 60% 40%);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .persona-cognitive .search-simple {
+    background: white;
+    border: 3px solid hsl(150 60% 40%);
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+  .persona-cognitive .icon-with-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+  .persona-cognitive .distraction-free {
+    background: hsl(150 30% 98%);
+    border: none;
+    box-shadow: none;
+  }
+  .persona-cognitive .memory-friendly {
+    background: hsl(150 40% 95%);
+    border: 2px solid hsl(150 60% 40%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
   }
 
   /* Anxiety support optimizations */
@@ -222,38 +340,89 @@ All colors MUST be HSL.
     --secondary: 30 30% 95%;
     --accent: 30 70% 50%;
     --background: 45 30% 96%; /* Cream background */
+    --card: 45 30% 98%;
+    --card-foreground: 210 15% 25%;
+    --muted: 30 30% 92%;
+    --muted-foreground: 210 15% 35%;
+    --border: 30 40% 85%;
     font-family: Arial, Verdana, sans-serif; /* Dyslexia-friendly font */
     font-size: 1.3rem;
     line-height: 2;
     letter-spacing: 0.1em;
     word-spacing: 0.2em;
+    text-transform: lowercase !important; /* Make all text lowercase */
   }
   .persona-dyslexia * {
     font-family: Arial, Verdana, sans-serif !important;
     line-height: 2 !important;
     letter-spacing: 0.1em !important;
     word-spacing: 0.2em !important;
+    text-transform: lowercase !important; /* Force lowercase for all text */
+  }
+  /* Ensure all text elements are lowercase */
+  .persona-dyslexia h1, .persona-dyslexia h2, .persona-dyslexia h3, 
+  .persona-dyslexia h4, .persona-dyslexia h5, .persona-dyslexia h6,
+  .persona-dyslexia p, .persona-dyslexia span, .persona-dyslexia div, 
+  .persona-dyslexia label, .persona-dyslexia button, .persona-dyslexia input,
+  .persona-dyslexia textarea, .persona-dyslexia select, .persona-dyslexia a,
+  .persona-dyslexia li, .persona-dyslexia td, .persona-dyslexia th,
+  .persona-dyslexia caption, .persona-dyslexia legend, .persona-dyslexia option,
+  .persona-dyslexia strong, .persona-dyslexia em, .persona-dyslexia b, 
+  .persona-dyslexia i, .persona-dyslexia small, .persona-dyslexia big,
+  .persona-dyslexia sub, .persona-dyslexia sup, .persona-dyslexia code,
+  .persona-dyslexia pre, .persona-dyslexia blockquote, .persona-dyslexia cite,
+  .persona-dyslexia abbr, .persona-dyslexia acronym, .persona-dyslexia address,
+  .persona-dyslexia time, .persona-dyslexia mark, .persona-dyslexia del,
+  .persona-dyslexia ins, .persona-dyslexia kbd, .persona-dyslexia samp,
+  .persona-dyslexia var, .persona-dyslexia dfn {
+    text-transform: lowercase !important;
   }
   .persona-dyslexia h1 {
     font-size: 3rem !important;
     margin-bottom: 2rem !important;
     color: hsl(210 15% 25%) !important;
+    text-transform: lowercase !important;
+    font-weight: 600 !important;
   }
   .persona-dyslexia h2 {
     font-size: 2.5rem !important;
     margin-bottom: 1.5rem !important;
     color: hsl(210 15% 25%) !important;
+    text-transform: lowercase !important;
+    font-weight: 600 !important;
   }
   .persona-dyslexia h3 {
     font-size: 1.8rem !important;
     margin-bottom: 1rem !important;
     color: hsl(210 15% 25%) !important;
+    text-transform: lowercase !important;
+    font-weight: 600 !important;
+  }
+  .persona-dyslexia h4, .persona-dyslexia h5, .persona-dyslexia h6 {
+    text-transform: lowercase !important;
+    font-weight: 600 !important;
   }
   .persona-dyslexia p {
     font-size: 1.3rem !important;
     margin-bottom: 1.5rem !important;
     color: hsl(210 15% 25%) !important;
     max-width: 50ch !important;
+    text-transform: lowercase !important;
+  }
+  .persona-dyslexia span, .persona-dyslexia div, .persona-dyslexia label {
+    text-transform: lowercase !important;
+  }
+  .persona-dyslexia button {
+    font-size: 1.2rem !important;
+    padding: 1rem 2rem !important;
+    border-radius: 0.5rem !important;
+    text-transform: lowercase !important;
+    font-weight: 600 !important;
+  }
+  .persona-dyslexia input, .persona-dyslexia textarea, .persona-dyslexia select {
+    font-size: 1.2rem !important;
+    padding: 1rem !important;
+    text-transform: lowercase !important;
   }
   .persona-dyslexia .service-card {
     background: white !important;
@@ -262,17 +431,80 @@ All colors MUST be HSL.
     border-radius: 1rem !important;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
   }
-  .persona-dyslexia button {
-    font-size: 1.2rem !important;
-    padding: 1rem 2rem !important;
-    border-radius: 0.5rem !important;
-  }
   .persona-dyslexia .readable-text {
     background: hsl(30 30% 98%);
     padding: 2rem;
     border-radius: 12px;
     border-left: 4px solid hsl(30 70% 45%);
     margin-bottom: 2rem;
+  }
+  /* Enhanced spacing for dyslexia */
+  .persona-dyslexia .container {
+    padding: 2rem !important;
+  }
+  .persona-dyslexia .card {
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+    background: hsl(45 30% 98%) !important;
+    border: 2px solid hsl(30 40% 85%) !important;
+  }
+  /* Larger click targets */
+  .persona-dyslexia a, .persona-dyslexia button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  /* Force lowercase for any remaining text elements */
+  .persona-dyslexia ::before, .persona-dyslexia ::after {
+    text-transform: lowercase !important;
+  }
+  
+  /* Handle any potential CSS overrides */
+  .persona-dyslexia [class*="text-"] {
+    text-transform: lowercase !important;
+  }
+  
+  /* Ensure lowercase for form elements */
+  .persona-dyslexia input::placeholder,
+  .persona-dyslexia textarea::placeholder {
+    text-transform: lowercase !important;
+  }
+  
+  /* Comprehensive lowercase transformation for ALL elements */
+  .persona-dyslexia *,
+  .persona-dyslexia *::before,
+  .persona-dyslexia *::after {
+    text-transform: lowercase !important;
+  }
+  
+  /* Force lowercase for any element with text content */
+  .persona-dyslexia [class],
+  .persona-dyslexia [id] {
+    text-transform: lowercase !important;
+  }
+  
+  /* Ensure lowercase for any dynamically generated content */
+  .persona-dyslexia .text-content,
+  .persona-dyslexia .content,
+  .persona-dyslexia .title,
+  .persona-dyslexia .heading,
+  .persona-dyslexia .description,
+  .persona-dyslexia .label,
+  .persona-dyslexia .caption {
+    text-transform: lowercase !important;
+  }
+  
+  /* Override any Tailwind or other framework classes */
+  .persona-dyslexia [class*="text-"],
+  .persona-dyslexia [class*="font-"],
+  .persona-dyslexia [class*="leading-"],
+  .persona-dyslexia [class*="tracking-"] {
+    text-transform: lowercase !important;
+  }
+  
+  /* Force lowercase for any remaining text nodes */
+  .persona-dyslexia {
+    text-transform: lowercase !important;
   }
 
   /* Hearing impairment optimizations */

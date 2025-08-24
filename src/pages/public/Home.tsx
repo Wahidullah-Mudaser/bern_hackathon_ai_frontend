@@ -110,7 +110,7 @@ const HomePage = () => {
       case 'dyslexia':
         return {
           ...base,
-          title: "Clear Reading Switzerland", 
+          title: "clear reading switzerland", 
           subtitle: "Simple words. Easy reading. Clear text. We use short sentences and simple language.",
           services: base.services.map(s => ({
             ...s,
@@ -164,6 +164,34 @@ const HomePage = () => {
 
   const content = getContent();
 
+  // Cognitive-specific step process
+  const cognitiveSteps = [
+    {
+      step: 1,
+      title: "Choose Your Destination",
+      description: "Pick where you want to go in Switzerland. We have many beautiful places.",
+      icon: "📍"
+    },
+    {
+      step: 2,
+      title: "Select Your Accommodation",
+      description: "Choose a hotel that fits your needs. All our hotels are easy to use.",
+      icon: "🏨"
+    },
+    {
+      step: 3,
+      title: "Book Your Tour",
+      description: "Pick a tour that works for you. Our tours are simple and clear.",
+      icon: "🚌"
+    },
+    {
+      step: 4,
+      title: "Get Extra Help",
+      description: "Tell us if you need extra support. We are here to help you.",
+      icon: "🤝"
+    }
+  ];
+
   return (
     <>
       {showAssessment && <AccessibilityAssessment />}
@@ -174,11 +202,11 @@ const HomePage = () => {
         />
       )}
       
-      <div className="min-h-screen bg-background">
+      <div className={`min-h-screen ${disabilityType === 'cognitive' ? 'bg-green-50' : 'bg-background'}`}>
         {/* Header */}
-        <header className="relative z-40 bg-white shadow-sm">
+        <header className={`relative z-40 ${disabilityType === 'cognitive' ? 'navigation-consistent' : 'bg-white shadow-sm'}`}>
           {/* Top Bar */}
-          <div className="bg-primary text-white py-2 px-4">
+          <div className={`${disabilityType === 'cognitive' ? 'bg-green-600' : 'bg-primary'} text-white py-2 px-4`}>
             <div className="container mx-auto flex justify-between items-center text-sm">
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1">
@@ -219,9 +247,18 @@ const HomePage = () => {
                 </div>
 
                 <div className="hidden md:flex items-center space-x-8">
-                  <Link to="/hotels" className="text-foreground hover:text-primary font-medium">Hotels</Link>
-                  <Link to="/tours" className="text-foreground hover:text-primary font-medium">Tours</Link>
-                  <Link to="/care-services" className="text-foreground hover:text-primary font-medium">Care Services</Link>
+                  <Link to="/hotels" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🏨</span>}
+                    Hotels
+                  </Link>
+                  <Link to="/tours" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🚌</span>}
+                    Tours
+                  </Link>
+                  <Link to="/care-services" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🤝</span>}
+                    Care Services
+                  </Link>
                 </div>
 
                 <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -231,9 +268,18 @@ const HomePage = () => {
 
               {isMenuOpen && (
                 <div className="md:hidden pb-4 space-y-4">
-                  <Link to="/hotels" className="block text-foreground hover:text-primary font-medium">Hotels</Link>
-                  <Link to="/tours" className="block text-foreground hover:text-primary font-medium">Tours</Link>
-                  <Link to="/care-services" className="block text-foreground hover:text-primary font-medium">Care Services</Link>
+                  <Link to="/hotels" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} block text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🏨</span>}
+                    Hotels
+                  </Link>
+                  <Link to="/tours" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} block text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🚌</span>}
+                    Tours
+                  </Link>
+                  <Link to="/care-services" className={`${disabilityType === 'cognitive' ? 'icon-with-label' : ''} block text-foreground hover:text-primary font-medium`}>
+                    {disabilityType === 'cognitive' && <span>🤝</span>}
+                    Care Services
+                  </Link>
                 </div>
               )}
             </div>
@@ -261,11 +307,93 @@ const HomePage = () => {
                 <ArrowDown className="ml-2 h-5 w-5" />
               </Button>
             </div>
+
+            {/* Memory-Friendly Section for Cognitive Users */}
+            {disabilityType === 'cognitive' && (
+              <div className="mt-16 max-w-4xl mx-auto">
+                <div className="memory-friendly">
+                  <h3 className="text-2xl font-bold text-green-800 mb-4">
+                    📝 Important Information - Easy to Remember
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-white p-4 rounded-lg border-2 border-green-300">
+                      <h4 className="font-bold text-green-800 mb-2">📞 Contact Information</h4>
+                      <p className="text-green-700">Phone: +41 31 301 55 65</p>
+                      <p className="text-green-700">Email: contact@claireundgeorge.ch</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg border-2 border-green-300">
+                      <h4 className="font-bold text-green-800 mb-2">⏰ When We're Available</h4>
+                      <p className="text-green-700">Monday to Friday: 9 AM - 6 PM</p>
+                      <p className="text-green-700">Weekends: 10 AM - 4 PM</p>
+                    </div>
+                  </div>
+                  <div className="success-message mt-6">
+                    <p className="text-center">
+                      ✅ We are here to help you plan your perfect trip to Switzerland!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
+        {/* Cognitive Step Process */}
+        {disabilityType === 'cognitive' && (
+          <section className="py-16 bg-green-50">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <h2 className="text-3xl font-bold text-center mb-8 text-green-800">
+                How to Plan Your Trip - Simple Steps
+              </h2>
+              
+              <div className="space-y-6">
+                {cognitiveSteps.map((step, index) => (
+                  <div key={index} className="step-process">
+                    <div className="flex items-start">
+                      <div className="step-number">{step.step}</div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-2 text-green-800">
+                          {step.icon} {step.title}
+                        </h3>
+                        <p className="text-green-700">{step.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="helpful-reminder mt-8">
+                <h3 className="font-bold text-green-800 mb-2">💡 Helpful Reminder:</h3>
+                <p className="text-green-700">
+                  You can always call us at +41 31 301 55 65 if you need help with any step. 
+                  We are here to make your trip planning easy and stress-free.
+                </p>
+              </div>
+
+              <div className="progressive-disclosure mt-8">
+                <div className="progressive-disclosure-header">
+                  <h3 className="text-lg font-bold text-green-800">
+                    📋 Need More Information?
+                  </h3>
+                </div>
+                <div className="progressive-disclosure-content">
+                  <p className="text-green-700 mb-3">
+                    We can help you with:
+                  </p>
+                  <ul className="list-disc list-inside text-green-700 space-y-1">
+                    <li>Finding the best hotels for your needs</li>
+                    <li>Planning your daily activities</li>
+                    <li>Booking transportation</li>
+                    <li>Getting extra support during your trip</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* About Section */}
-        <section className="py-20 bg-background">
+        <section className={`py-20 ${disabilityType === 'cognitive' ? 'bg-green-100' : 'bg-background'}`}>
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <h2 className="text-4xl font-bold mb-8 text-foreground">
               Welcome to Accessible Switzerland
@@ -285,9 +413,11 @@ const HomePage = () => {
         </section>
 
         {/* Services Section */}
-        <section className="py-20 bg-muted/30">
+        <section className={`py-20 ${disabilityType === 'cognitive' ? 'bg-green-100' : 'bg-muted/30'}`}>
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-16 text-foreground">What we offer</h2>
+            <h2 className={`text-4xl font-bold text-center mb-16 ${disabilityType === 'cognitive' ? 'text-green-800' : 'text-foreground'}`}>
+              {disabilityType === 'cognitive' ? 'What We Offer - Easy to Understand' : 'What we offer'}
+            </h2>
             
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {content.services.map((service, index) => (
