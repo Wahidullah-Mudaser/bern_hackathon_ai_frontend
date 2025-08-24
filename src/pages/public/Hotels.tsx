@@ -1,46 +1,140 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, Mail, Wifi, Car, Utensils, Accessibility, Star, MapPin } from "lucide-react";
+import { usePersona } from "@/contexts/PersonaContext";
 
 const HotelsPage = () => {
-  const hotels = [
+  const { disabilityType } = usePersona();
+
+  // All hotels data - general and wheelchair-specific
+  const allHotels = [
+    // General hotels for all disabilities
     {
       id: 1,
-      name: "Swiss Alpine Resort Accessible",
+      name: "Swiss Alpine Resort",
       location: "Interlaken",
       rating: 4.8,
       price: "CHF 280-450",
       image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop",
-      features: ["Wheelchair accessible rooms", "Accessible bathrooms", "Elevator access", "Accessible parking"],
+      features: ["Modern facilities", "Beautiful views", "Excellent service", "Central location"],
       amenities: ["Free WiFi", "Restaurant", "Spa", "Pool"],
-      description: "Luxury resort with full accessibility features in the heart of the Swiss Alps."
+      description: "Luxury resort in the heart of the Swiss Alps with beautiful mountain views.",
+      type: "general"
     },
     {
       id: 2,
-      name: "Accessible Lakeside Hotel",
+      name: "Lakeside Boutique Hotel",
       location: "Lake Geneva",
       rating: 4.6,
       price: "CHF 220-380",
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
-      features: ["Roll-in showers", "Accessible balconies", "Audio alerts", "Braille signage"],
+      features: ["Lake views", "Modern amenities", "Peaceful location", "Quality service"],
       amenities: ["Free WiFi", "Restaurant", "Parking", "Lake view"],
-      description: "Beautiful lakeside location with comprehensive accessibility accommodations."
+      description: "Beautiful lakeside location with stunning views and modern accommodations.",
+      type: "general"
     },
     {
       id: 3,
-      name: "Mountain View Accessible Lodge",
+      name: "Mountain View Lodge",
       location: "Zermatt",
       rating: 4.7,
       price: "CHF 350-520",
       image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop",
-      features: ["Accessible ski storage", "Modified bathrooms", "Wide doorways", "Accessible paths"],
+      features: ["Mountain views", "Ski access", "Traditional design", "Premium location"],
       amenities: ["Free WiFi", "Restaurant", "Ski access", "Mountain views"],
-      description: "Premier mountain lodge with stunning Matterhorn views and full accessibility."
+      description: "Premier mountain lodge with stunning Matterhorn views and ski access.",
+      type: "general"
+    },
+    // Wheelchair-specific hotels from Claire & George
+    {
+      id: 4,
+      name: "Victoria-Jungfrau Grand Hotel & Spa",
+      location: "Interlaken",
+      rating: 5.0,
+      price: "CHF 339-699",
+      image: "https://wp.claireundgeorge.ch/res/img/144/Aussenansicht-mit-neuer-Terrasse.jpg",
+      features: ["Barrier-free public areas", "Wheelchair accessible toilet", "Barrier-free rooms", "Roll-in shower"],
+      amenities: ["Free WiFi", "Spa", "Restaurant", "Concierge"],
+      description: "Five-star luxury hotel with complete wheelchair accessibility in Interlaken.",
+      type: "wheelchair"
+    },
+    {
+      id: 5,
+      name: "Lenkerhof Gourmet Spa Resort",
+      location: "Lenk im Simmental",
+      rating: 5.0,
+      price: "CHF 160-850",
+      image: "https://wp.claireundgeorge.ch/res/img/80/Lenkerhof_Winter_Terrasse.jpg",
+      features: ["Accessible public areas", "Accessible toilets", "Accessible rooms", "Roll-in shower"],
+      amenities: ["Gourmet restaurant", "Spa", "Free WiFi", "Mountain views"],
+      description: "Five-star gourmet spa resort with full accessibility in the Bernese Oberland.",
+      type: "wheelchair"
+    },
+    {
+      id: 6,
+      name: "Hotel Savoy Bern",
+      location: "Bern",
+      rating: 4.0,
+      price: "From CHF 230",
+      image: "https://wp.claireundgeorge.ch/res/img/104/DSC1062.jpg",
+      features: ["Barrier-free public areas", "Wheelchair accessible toilet", "Accessible rooms", "Roll-in shower"],
+      amenities: ["Free WiFi", "Restaurant", "Bar", "City center location"],
+      description: "Four-star hotel in Bern city center with complete wheelchair accessibility.",
+      type: "wheelchair"
+    },
+    {
+      id: 7,
+      name: "Hotel Allegra",
+      location: "Pontresina",
+      rating: 3.0,
+      price: "CHF 145-600",
+      image: "https://wp.claireundgeorge.ch/res/img/118/2024_Hotel_Allegra_aussen_Sommer-rG.jpg",
+      features: ["Barrier-free public areas", "Wheelchair accessible toilet", "Accessible rooms", "Roll-in shower"],
+      amenities: ["Free WiFi", "Restaurant", "Mountain location", "Alpine views"],
+      description: "Three-star mountain hotel in Graubünden with wheelchair accessibility.",
+      type: "wheelchair"
+    },
+    {
+      id: 8,
+      name: "Hotel Heiden - Wellness am Bodensee",
+      location: "Heiden",
+      rating: 4.0,
+      price: "CHF 195-450",
+      image: "https://wp.claireundgeorge.ch/res/img/138/Lobby.png",
+      features: ["Barrier-free public areas", "Wheelchair accessible toilet", "Accessible rooms", "Roll-in shower"],
+      amenities: ["Wellness area", "Lake views", "Restaurant", "Free WiFi"],
+      description: "Four-star wellness hotel with wheelchair accessibility and Lake Constance views.",
+      type: "wheelchair"
     }
   ];
+
+  // Filter hotels based on disability type
+  const hotels = useMemo(() => {
+    if (disabilityType === 'wheelchair') {
+      return allHotels.filter(hotel => hotel.type === 'wheelchair');
+    }
+    // For other disabilities or no selection, show all hotels
+    return allHotels;
+  }, [disabilityType]);
+
+  // Dynamic hero content based on disability type
+  const getHeroContent = () => {
+    if (disabilityType === 'wheelchair') {
+      return {
+        title: "Wheelchair Accessible Hotels in Switzerland",
+        description: "Discover our carefully selected collection of wheelchair accessible hotels throughout Switzerland, all verified for excellent accessibility standards."
+      };
+    }
+    return {
+      title: "Accessible Hotels in Switzerland",
+      description: "Discover our collection of accessible hotels and accommodations throughout Switzerland, designed to meet diverse accessibility needs."
+    };
+  };
+
+  const heroContent = getHeroContent();
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,11 +175,10 @@ const HotelsPage = () => {
       <section className="bg-primary text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Wheelchair Accessible Hotels in Switzerland
+            {heroContent.title}
           </h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Discover our carefully selected collection of accessible hotels and accommodations 
-            throughout Switzerland, all verified for excellent accessibility standards.
+            {heroContent.description}
           </p>
         </div>
       </section>
