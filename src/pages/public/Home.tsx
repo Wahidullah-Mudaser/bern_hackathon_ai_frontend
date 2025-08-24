@@ -27,17 +27,17 @@ const HomePage = () => {
       services: [
         {
           title: "Holidays with Care",
-          description: "Additional services to ensure you have a relaxing and stress-free holiday.",
+          description: "Additional services offered by Claire & George to ensure you have a relaxing and stress-free holiday – nothing is too much trouble.",
           link: "/care-services"
         },
         {
           title: "Hotels and Accommodation", 
-          description: "Our selection of accessible places to stay in Switzerland.",
+          description: "Here you will find our selection of places to stay, including the best wheelchair accessible hotels, in Switzerland!",
           link: "/hotels"
         },
         {
           title: "Accessible Tours",
-          description: "Experience Switzerland with our specially designed accessible tours.",
+          description: "Welcome to the Accessible Tour of Switzerland! Discover breathtaking scenery and charming cities, all at a relaxed pace - by train, boat, and wheelchair taxi.",
           link: "/tours"
         }
       ]
