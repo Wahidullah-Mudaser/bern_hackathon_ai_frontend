@@ -13,7 +13,7 @@ const HotelsPage = () => {
       location: "Interlaken",
       rating: 4.8,
       price: "CHF 280-450",
-      image: "/api/placeholder/400/300",
+      image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop",
       features: ["Wheelchair accessible rooms", "Accessible bathrooms", "Elevator access", "Accessible parking"],
       amenities: ["Free WiFi", "Restaurant", "Spa", "Pool"],
       description: "Luxury resort with full accessibility features in the heart of the Swiss Alps."
@@ -24,7 +24,7 @@ const HotelsPage = () => {
       location: "Lake Geneva",
       rating: 4.6,
       price: "CHF 220-380",
-      image: "/api/placeholder/400/300",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
       features: ["Roll-in showers", "Accessible balconies", "Audio alerts", "Braille signage"],
       amenities: ["Free WiFi", "Restaurant", "Parking", "Lake view"],
       description: "Beautiful lakeside location with comprehensive accessibility accommodations."
@@ -35,7 +35,7 @@ const HotelsPage = () => {
       location: "Zermatt",
       rating: 4.7,
       price: "CHF 350-520",
-      image: "/api/placeholder/400/300",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop",
       features: ["Accessible ski storage", "Modified bathrooms", "Wide doorways", "Accessible paths"],
       amenities: ["Free WiFi", "Restaurant", "Ski access", "Mountain views"],
       description: "Premier mountain lodge with stunning Matterhorn views and full accessibility."
@@ -93,57 +93,63 @@ const HotelsPage = () => {
       {/* Hotels Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-6 max-w-7xl mx-auto">
+          <div className="grid gap-8 max-w-6xl mx-auto">
             {hotels.map((hotel) => (
-              <Card key={hotel.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-card border border-border">
-                <div className="grid lg:grid-cols-5 gap-0">
+              <Card key={hotel.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border border-gray-200">
+                <div className="md:flex">
                   {/* Hotel Image */}
-                  <div className="lg:col-span-2">
-                    <div className="aspect-[16/10] lg:h-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-primary-glow/60"></div>
-                      <div className="relative z-10 text-center text-white p-6">
-                        <h4 className="text-xl font-bold mb-2">{hotel.name}</h4>
-                        <div className="flex items-center justify-center gap-1 mb-2">
-                          <MapPin className="h-4 w-4" />
-                          <span className="text-sm">{hotel.location}</span>
-                        </div>
-                        <div className="flex items-center justify-center gap-1">
+                  <div className="md:w-2/5">
+                    <div className="aspect-[4/3] md:h-full relative overflow-hidden">
+                      <img 
+                        src={hotel.image} 
+                        alt={hotel.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f3f4f6'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%236b7280' font-family='Arial' font-size='16'%3E" + hotel.name + "%3C/text%3E%3C/svg%3E";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                        <div className="flex items-center gap-1">
                           {[...Array(5)].map((_, i) => (
                             <Star 
                               key={i} 
-                              className={`h-4 w-4 ${i < Math.floor(hotel.rating) ? 'text-yellow-300 fill-current' : 'text-white/40'}`} 
+                              className={`h-3 w-3 ${i < Math.floor(hotel.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
                             />
                           ))}
-                          <span className="ml-2 text-sm font-semibold">{hotel.rating}</span>
+                          <span className="ml-1 text-xs font-semibold text-gray-700">{hotel.rating}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Hotel Details */}
-                  <div className="lg:col-span-3 p-8">
-                    <div className="flex justify-between items-start mb-6">
+                  <div className="md:w-3/5 p-6">
+                    <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="text-3xl font-bold text-foreground mb-3">{hotel.name}</h3>
-                        <p className="text-muted-foreground text-lg leading-relaxed mb-4">{hotel.description}</p>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{hotel.name}</h3>
+                        <div className="flex items-center gap-2 text-gray-600 mb-3">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm">{hotel.location}</span>
+                        </div>
+                        <p className="text-gray-600 text-sm leading-relaxed">{hotel.description}</p>
                       </div>
                       <div className="text-right ml-6">
-                        <div className="text-3xl font-bold text-primary">{hotel.price}</div>
-                        <div className="text-sm text-muted-foreground">per night</div>
+                        <div className="text-2xl font-bold text-blue-600">{hotel.price}</div>
+                        <div className="text-xs text-gray-500">per night</div>
                       </div>
                     </div>
 
-                    {/* Accessibility Features - Prominent */}
-                    <div className="mb-6 p-4 bg-primary/5 rounded-lg border-l-4 border-primary">
-                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-primary">
-                        <Accessibility className="h-5 w-5" />
-                        Wheelchair Accessibility Features
+                    {/* Accessibility Features */}
+                    <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <h4 className="font-semibold text-sm mb-3 flex items-center gap-2 text-blue-700">
+                        <Accessibility className="h-4 w-4" />
+                        Accessibility Features
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2">
                         {hotel.features.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm font-medium">
-                            <div className="w-2 h-2 bg-primary rounded-full"></div>
-                            <span>{feature}</span>
+                          <div key={index} className="flex items-center gap-2 text-xs">
+                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                            <span className="text-gray-700">{feature}</span>
                           </div>
                         ))}
                       </div>
@@ -151,22 +157,22 @@ const HotelsPage = () => {
 
                     {/* Amenities */}
                     <div className="mb-6">
-                      <h4 className="font-semibold text-lg mb-3 text-foreground">Hotel Amenities</h4>
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                      <h4 className="font-semibold text-sm mb-3 text-gray-900">Hotel Amenities</h4>
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                         {hotel.amenities.map((amenity, index) => {
                           const getIcon = (amenity: string) => {
-                            if (amenity.includes('WiFi')) return <Wifi className="h-5 w-5" />;
-                            if (amenity.includes('Restaurant')) return <Utensils className="h-5 w-5" />;
-                            if (amenity.includes('Parking')) return <Car className="h-5 w-5" />;
-                            return <span className="h-5 w-5" />;
+                            if (amenity.includes('WiFi')) return <Wifi className="h-3 w-3" />;
+                            if (amenity.includes('Restaurant')) return <Utensils className="h-3 w-3" />;
+                            if (amenity.includes('Parking')) return <Car className="h-3 w-3" />;
+                            return <span className="h-3 w-3" />;
                           };
                           
                           return (
-                            <div key={index} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                              <div className="text-primary">
+                            <div key={index} className="flex items-center gap-2 text-xs text-gray-600">
+                              <div className="text-gray-500">
                                 {getIcon(amenity)}
                               </div>
-                              <span className="text-sm font-medium">{amenity}</span>
+                              <span>{amenity}</span>
                             </div>
                           );
                         })}
@@ -174,16 +180,16 @@ const HotelsPage = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-4">
-                      <Button size="lg" className="bg-primary hover:bg-primary-glow text-white font-semibold px-8">
+                    <div className="flex flex-wrap gap-3">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">
                         Book Now
                       </Button>
-                      <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5 font-semibold px-6">
+                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 px-4">
                         View Details
                       </Button>
-                      <Button size="lg" variant="ghost" className="text-muted-foreground hover:text-foreground font-semibold">
-                        <Mail className="h-5 w-5 mr-2" />
-                        Contact Hotel
+                      <Button variant="ghost" className="text-gray-600 hover:text-gray-900 px-4">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Contact
                       </Button>
                     </div>
                   </div>

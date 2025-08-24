@@ -3,46 +3,84 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, Mail, MapPin, Clock, Users, Star, Mountain } from "lucide-react";
+import { usePersona } from "@/contexts/PersonaContext";
 
 const ToursPage = () => {
-  const tours = [
-    {
-      id: 1,
-      name: "Accessible Alpine Experience",
-      location: "Jungfraujoch - Top of Europe",
-      duration: "Full Day (8 hours)",
-      groupSize: "Max 6 people",
-      price: "CHF 450",
-      rating: 4.9,
-      image: "/api/placeholder/400/300",
-      highlights: ["Wheelchair accessible trains", "Professional guide", "Adapted viewing platforms", "Glacier experience"],
-      description: "Experience the breathtaking beauty of the Swiss Alps with our fully accessible tour to Jungfraujoch. All transportation and viewing areas are wheelchair accessible."
-    },
-    {
-      id: 2,
-      name: "Accessible Rhine Falls Adventure",
-      location: "Schaffhausen",
-      duration: "Half Day (4 hours)",
-      groupSize: "Max 8 people", 
-      price: "CHF 280",
-      rating: 4.7,
-      image: "/api/placeholder/400/300",
-      highlights: ["Accessible boat rides", "Close-up waterfall viewing", "Accessible paths", "Photography assistance"],
-      description: "Visit Europe's most powerful waterfall with specially designed accessible viewing platforms and boat experiences."
-    },
-    {
-      id: 3,
-      name: "Swiss Countryside & Accessibility Tour",
-      location: "Lucerne & Surroundings",
-      duration: "Full Day (7 hours)",
-      groupSize: "Max 6 people",
-      price: "CHF 380",
-      rating: 4.8,
-      image: "/api/placeholder/400/300",
-      highlights: ["Accessible transport", "Historic sites", "Lake cruise", "Traditional Swiss lunch"],
-      description: "Discover the charm of Swiss countryside with accessible transportation and carefully selected barrier-free attractions."
+  const { disabilityType } = usePersona();
+  const getToursForDisability = () => {
+    if (disabilityType === 'wheelchair') {
+      return [
+        {
+          id: 1,
+          name: "Wheelchair Accessible Alpine Experience",
+          location: "Jungfraujoch - Top of Europe",
+          duration: "Full Day (8 hours)",
+          groupSize: "Max 4 people",
+          price: "CHF 450",
+          rating: 4.9,
+          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+          highlights: ["Wheelchair accessible trains", "Professional wheelchair guide", "Adapted viewing platforms", "Glacier experience"],
+          description: "Experience the breathtaking beauty of the Swiss Alps with our fully wheelchair accessible tour to Jungfraujoch."
+        },
+        {
+          id: 2,
+          name: "Accessible Rhine Falls Adventure",
+          location: "Schaffhausen",
+          duration: "Half Day (4 hours)",
+          groupSize: "Max 6 people", 
+          price: "CHF 280",
+          rating: 4.7,
+          image: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=400&h=300&fit=crop",
+          highlights: ["Wheelchair accessible boat rides", "Close-up waterfall viewing", "Accessible paths", "Wheelchair photography assistance"],
+          description: "Visit Europe's most powerful waterfall with specially designed wheelchair accessible viewing platforms."
+        }
+      ];
+    } else if (disabilityType === 'low-vision') {
+      return [
+        {
+          id: 1,
+          name: "Tactile Swiss Alps Experience",
+          location: "Jungfraujoch - Top of Europe",
+          duration: "Full Day (8 hours)",
+          groupSize: "Max 4 people",
+          price: "CHF 450",
+          rating: 4.9,
+          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+          highlights: ["Audio descriptions", "Tactile experiences", "Sound mapping", "Specialized guide"],
+          description: "Discover the Swiss Alps through enhanced sensory experiences designed for low vision travelers."
+        }
+      ];
+    } else {
+      return [
+        {
+          id: 1,
+          name: "Swiss Alpine Experience",
+          location: "Jungfraujoch - Top of Europe",
+          duration: "Full Day (8 hours)",
+          groupSize: "Max 8 people",
+          price: "CHF 450",
+          rating: 4.9,
+          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+          highlights: ["Professional guide", "Scenic viewing platforms", "Glacier experience", "Cultural insights"],
+          description: "Experience the breathtaking beauty of the Swiss Alps with our comprehensive tour to Jungfraujoch."
+        },
+        {
+          id: 2,
+          name: "Rhine Falls Adventure",
+          location: "Schaffhausen",
+          duration: "Half Day (4 hours)",
+          groupSize: "Max 10 people", 
+          price: "CHF 280",
+          rating: 4.7,
+          image: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=400&h=300&fit=crop",
+          highlights: ["Boat rides", "Close-up waterfall viewing", "Nature walks", "Photography opportunities"],
+          description: "Visit Europe's most powerful waterfall with comprehensive viewing experiences."
+        }
+      ];
     }
-  ];
+  };
+
+  const tours = getToursForDisability();
 
   return (
     <div className="min-h-screen bg-background">
@@ -101,24 +139,39 @@ const ToursPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid gap-8 max-w-6xl mx-auto">
             {tours.map((tour) => (
-              <Card key={tour.id} className="overflow-hidden hover:shadow-alpine transition-all duration-300">
+              <Card key={tour.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border border-gray-200">
                 <div className="md:flex">
                   {/* Tour Image */}
-                  <div className="md:w-1/3">
-                    <div className="aspect-[4/3] md:h-full bg-gradient-alpine flex items-center justify-center">
-                      <div className="text-center text-white">
-                        <Mountain className="h-12 w-12 mx-auto mb-2" />
-                        <span className="font-semibold">{tour.name}</span>
+                  <div className="md:w-2/5">
+                    <div className="aspect-[4/3] md:h-full relative overflow-hidden">
+                      <img 
+                        src={tour.image} 
+                        alt={tour.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f3f4f6'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%236b7280' font-family='Arial' font-size='16'%3E" + tour.name + "%3C/text%3E%3C/svg%3E";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-3 w-3 ${i < Math.floor(tour.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                            />
+                          ))}
+                          <span className="ml-1 text-xs font-semibold text-gray-700">{tour.rating}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Tour Details */}
-                  <div className="md:w-2/3 p-6">
+                  <div className="md:w-3/5 p-6">
                     <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-2xl font-bold text-foreground mb-2">{tour.name}</h3>
-                        <div className="flex items-center gap-4 text-muted-foreground mb-2">
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{tour.name}</h3>
+                        <div className="flex items-center gap-4 text-gray-600 mb-3 text-sm">
                           <div className="flex items-center gap-1">
                             <MapPin className="h-4 w-4" />
                             <span>{tour.location}</span>
@@ -132,55 +185,47 @@ const ToursPage = () => {
                             <span>{tour.groupSize}</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`h-4 w-4 ${i < Math.floor(tour.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-                              />
-                            ))}
-                            <span className="ml-2 text-sm font-semibold">{tour.rating}</span>
-                          </div>
-                        </div>
+                        <p className="text-gray-600 text-sm leading-relaxed">{tour.description}</p>
                       </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-primary">{tour.price}</div>
-                        <div className="text-sm text-muted-foreground">per person</div>
+                      <div className="text-right ml-6">
+                        <div className="text-2xl font-bold text-blue-600">{tour.price}</div>
+                        <div className="text-xs text-gray-500">per person</div>
                       </div>
                     </div>
 
-                    <p className="text-muted-foreground mb-4">{tour.description}</p>
-
                     {/* Tour Highlights */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-2">Tour Highlights</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <h4 className="font-semibold text-sm mb-3 text-blue-700">Tour Highlights</h4>
+                      <div className="grid grid-cols-2 gap-2">
                         {tour.highlights.map((highlight, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm">
-                            <div className="h-2 w-2 bg-primary rounded-full"></div>
-                            <span>{highlight}</span>
+                          <div key={index} className="flex items-center gap-2 text-xs">
+                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                            <span className="text-gray-700">{highlight}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Accessibility Badge */}
-                    <div className="mb-6">
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
-                        ✓ Fully Wheelchair Accessible
-                      </Badge>
-                    </div>
+                    {disabilityType && (
+                      <div className="mb-4">
+                        <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
+                          ✓ {disabilityType === 'wheelchair' ? 'Wheelchair Accessible' : 
+                             disabilityType === 'low-vision' ? 'Low Vision Friendly' : 
+                             'Accessibility Adapted'}
+                        </Badge>
+                      </div>
+                    )}
 
                     {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      <Button className="bg-primary hover:bg-primary-glow">
+                    <div className="flex flex-wrap gap-3">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">
                         Book Tour
                       </Button>
-                      <Button variant="outline">
+                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 px-4">
                         View Itinerary
                       </Button>
-                      <Button variant="ghost">
+                      <Button variant="ghost" className="text-gray-600 hover:text-gray-900 px-4">
                         <Mail className="h-4 w-4 mr-2" />
                         Ask Questions
                       </Button>

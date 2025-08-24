@@ -3,70 +3,129 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, Mail, Heart, Users, Clock, Shield, Stethoscope, Home } from "lucide-react";
+import { usePersona } from "@/contexts/PersonaContext";
 
 const ServicesPage = () => {
-  const services = [
-    {
-      id: 1,
-      name: "Personal Care Assistance",
-      icon: Users,
-      duration: "24/7 Available",
-      price: "CHF 45-65/hour",
-      description: "Professional personal care assistants trained in disability support and Swiss hospitality.",
-      features: [
-        "Mobility assistance",
-        "Personal hygiene support", 
-        "Medication management",
-        "Meal assistance",
-        "Transfer support"
-      ]
-    },
-    {
-      id: 2,
-      name: "Medical Equipment Rental",
-      icon: Stethoscope,
-      duration: "Daily/Weekly rates",
-      price: "From CHF 25/day",
-      description: "High-quality medical equipment delivered to your accommodation throughout Switzerland.",
-      features: [
-        "Wheelchairs (manual/electric)",
-        "Hospital beds",
-        "Shower chairs",
-        "Walking aids",
-        "Oxygen equipment"
-      ]
-    },
-    {
-      id: 3,
-      name: "Companion Services",
-      icon: Heart,
-      duration: "Flexible hours",
-      price: "CHF 35-50/hour",
-      description: "Friendly companions to enhance your Swiss travel experience with local knowledge.",
-      features: [
-        "Sightseeing companion",
-        "Shopping assistance",
-        "Transportation support",
-        "Language interpretation",
-        "Emergency support"
-      ]
-    },
-    {
-      id: 4,
-      name: "Home Nursing Care",
-      icon: Home,
-      duration: "As needed",
-      price: "CHF 85-120/hour",
-      description: "Qualified nurses available for in-room medical care and health monitoring.",
-      features: [
-        "Medication administration",
-        "Wound care",
-        "Health monitoring",
-        "IV therapy",
-        "Post-surgery care"
-      ]
+  const { disabilityType } = usePersona();
+  const getServicesForDisability = () => {
+    if (disabilityType === 'wheelchair') {
+      return [
+        {
+          id: 1,
+          name: "Wheelchair Mobility Assistance",
+          icon: Users,
+          duration: "24/7 Available",
+          price: "CHF 55-75/hour",
+          description: "Specialized wheelchair mobility assistants trained in transfer techniques and accessibility navigation.",
+          features: [
+            "Wheelchair transfer assistance",
+            "Accessibility route planning", 
+            "Wheelchair maintenance support",
+            "Adaptive equipment setup",
+            "Emergency mobility support"
+          ]
+        },
+        {
+          id: 2,
+          name: "Wheelchair Equipment & Accessories",
+          icon: Stethoscope,
+          duration: "Daily/Weekly rates",
+          price: "From CHF 35/day",
+          description: "Comprehensive wheelchair equipment and accessibility aids delivered to your accommodation.",
+          features: [
+            "Manual & electric wheelchairs",
+            "Wheelchair accessible vehicles",
+            "Ramps and accessibility aids",
+            "Shower chairs and toilet seats",
+            "Pressure relief cushions"
+          ]
+        }
+      ];
+    } else if (disabilityType === 'low-vision') {
+      return [
+        {
+          id: 1,
+          name: "Vision Support Services",
+          icon: Users,
+          duration: "24/7 Available",
+          price: "CHF 50-70/hour",
+          description: "Trained sighted guides and orientation specialists for low vision travelers.",
+          features: [
+            "Sighted guide services",
+            "Navigation assistance", 
+            "Audio descriptions",
+            "Object identification",
+            "Reading assistance"
+          ]
+        },
+        {
+          id: 2,
+          name: "Assistive Technology Rental",
+          icon: Stethoscope,
+          duration: "Daily/Weekly rates",
+          price: "From CHF 30/day",
+          description: "Advanced assistive technology devices for enhanced independence during your stay.",
+          features: [
+            "Magnification devices",
+            "Audio navigation systems",
+            "Talking watches & devices",
+            "Braille displays",
+            "Voice recording devices"
+          ]
+        }
+      ];
+    } else {
+      return [
+        {
+          id: 1,
+          name: "Personal Care Assistance",
+          icon: Users,
+          duration: "24/7 Available",
+          price: "CHF 45-65/hour",
+          description: "Professional personal care assistants trained in disability support and Swiss hospitality.",
+          features: [
+            "Mobility assistance",
+            "Personal hygiene support", 
+            "Medication management",
+            "Meal assistance",
+            "Transfer support"
+          ]
+        },
+        {
+          id: 2,
+          name: "Medical Equipment Rental",
+          icon: Stethoscope,
+          duration: "Daily/Weekly rates",
+          price: "From CHF 25/day",
+          description: "High-quality medical equipment delivered to your accommodation throughout Switzerland.",
+          features: [
+            "Wheelchairs (manual/electric)",
+            "Hospital beds",
+            "Shower chairs",
+            "Walking aids",
+            "Oxygen equipment"
+          ]
+        },
+        {
+          id: 3,
+          name: "Companion Services",
+          icon: Heart,
+          duration: "Flexible hours",
+          price: "CHF 35-50/hour",
+          description: "Friendly companions to enhance your Swiss travel experience with local knowledge.",
+          features: [
+            "Sightseeing companion",
+            "Shopping assistance",
+            "Transportation support",
+            "Language interpretation",
+            "Emergency support"
+          ]
+        }
+      ];
     }
-  ];
+  };
+
+  const services = getServicesForDisability();
 
   const whyChooseUs = [
     {
@@ -143,40 +202,42 @@ const ServicesPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {services.map((service) => (
-              <Card key={service.id} className="hover:shadow-alpine transition-all duration-300">
-                <CardHeader>
+              <Card key={service.id} className="hover:shadow-lg transition-all duration-300 bg-white border border-gray-200">
+                <CardHeader className="pb-4">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/10 rounded-lg p-3">
-                      <service.icon className="h-8 w-8 text-primary" />
+                    <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+                      <service.icon className="h-8 w-8 text-blue-600" />
                     </div>
-                    <div>
-                      <CardTitle className="text-xl">{service.name}</CardTitle>
-                      <div className="flex gap-4 text-sm text-muted-foreground">
+                    <div className="flex-1">
+                      <CardTitle className="text-xl text-gray-900">{service.name}</CardTitle>
+                      <div className="flex gap-4 text-sm text-gray-600 mt-1">
                         <span>{service.duration}</span>
-                        <span className="font-semibold text-primary">{service.price}</span>
+                        <span className="font-semibold text-blue-600">{service.price}</span>
                       </div>
                     </div>
                   </div>
-                  <CardDescription className="text-base">
+                  <CardDescription className="text-base text-gray-600 leading-relaxed">
                     {service.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <h4 className="font-semibold">Service Includes:</h4>
-                    <div className="grid gap-2">
-                      {service.features.map((feature, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm">
-                          <div className="h-2 w-2 bg-primary rounded-full"></div>
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                <CardContent className="pt-0">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-semibold text-gray-900 mb-3">Service Includes:</h4>
+                      <div className="grid gap-2">
+                        {service.features.map((feature, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                            <div className="h-1.5 w-1.5 bg-blue-600 rounded-full"></div>
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="pt-4 flex gap-3">
-                      <Button className="bg-primary hover:bg-primary-glow">
+                    <div className="flex gap-3">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                         Request Service
                       </Button>
-                      <Button variant="outline">
+                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
                         Learn More
                       </Button>
                     </div>
